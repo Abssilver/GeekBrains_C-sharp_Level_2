@@ -45,11 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdvancedMovingStar.cs" />
     <Compile Include="BaseObject.cs" />
+    <Compile Include="CustomPulsarStaticObject.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Star.cs" />
+    <Compile Include="PulsarStaticObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
