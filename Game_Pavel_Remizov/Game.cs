@@ -24,8 +24,8 @@ namespace Game_Pavel_Remizov
         private static void Load()
         {
             Random rnd = new Random();
-            _objs = new BaseObject[27];
-            for (int i = 0; i < _objs.Length; i+=9)
+            _objs = new BaseObject[30];
+            for (int i = 0; i < _objs.Length; i+=10)
             {
                 int imageSize = rnd.Next(4, 6);
                 _objs[i] =
@@ -47,34 +47,37 @@ namespace Game_Pavel_Remizov
                     new Star(new Point(rnd.Next(Width / 5, Width), rnd.Next(0, Height)),
                              new Point(-2, 0),
                              new Size(imageSize * 2, imageSize * 2),
-                             Image.FromFile($"..//..//Resourses//spaceShooter_asteroid_{rnd.Next(1, 5)}.png"));
+                             Image.FromFile($"..//..//Resourses//box_asteroid_{rnd.Next(1, 5)}.png"));
                 _objs[i + 4] =
                     new Star(new Point(rnd.Next(Width / 5, Width), rnd.Next(0, Height)),
                              new Point(-3, 0),
-                             new Size(imageSize * 2, imageSize * 2),
-                             Image.FromFile($"..//..//Resourses//spaceShooter_asteroid_{rnd.Next(1, 5)}.png"));
+                             new Size(imageSize * 3, imageSize * 3),
+                             Image.FromFile($"..//..//Resourses//box_asteroid_{rnd.Next(1, 5)}.png"));
                 _objs[i + 5] =
-                    new AdvancedMovingStar(new Point(rnd.Next(Width / 5, Width), rnd.Next(0, Height)),
-                                           new Point(1, 1),
-                                           new Size(imageSize * 4, imageSize * 2),
-                                           Image.FromFile($"..//..//Resourses//spaceShooter_comet_{rnd.Next(1, 6)}.png"));
+                    new AdvancedMovingStar(new Point(rnd.Next(0, Width), rnd.Next(0, Height / 3)),//класс сыроват
+                                           new Point(1, 1), //работает только с (1,1) и (-1,-1)
+                                           new Size(imageSize * 5, imageSize * 2),
+                                           Image.FromFile($"..//..//Resourses//rect52_comet_{rnd.Next(1, 6)}.png"));
                 _objs[i + 6] =
-                    new AdvancedMovingStar(new Point(rnd.Next(Width / 5, Width), rnd.Next(0, Height)),
+                    new UFO(new Point(rnd.Next(Width / 5, Width), rnd.Next(0, Height)),
                                            new Point(-1, -1),
-                                           new Size(imageSize * 2, imageSize * 2),
-                                           Image.FromFile($"..//..//Resourses//spaceShooter_asteroid_{rnd.Next(1, 5)}.png"));
-                
+                                           new Size(imageSize * 5, imageSize * 5),
+                                           Image.FromFile($"..//..//Resourses//box_ufo_{rnd.Next(1, 6)}.png"));
                 _objs[i + 7] =
                     new Star(new Point(rnd.Next(Width / 5, Width), rnd.Next(0, Height)),
                              new Point(-2, 0),
                              new Size(imageSize * 5, imageSize * 5),
-                             Image.FromFile($"..//..//Resourses//spaceShooter_object_{rnd.Next(1, 7)}.png"));
-
+                             Image.FromFile($"..//..//Resourses//box_object_{rnd.Next(1, 5)}.png"));
                 _objs[i + 8] =
-                    new Star(new Point(rnd.Next(Width / 5, Width), rnd.Next(0, Height)),
+                    new Star(new Point(rnd.Next(0, Width / 2), rnd.Next(imageSize * 15, Height - imageSize * 15)),
                              new Point(-1, 0),
                              new Size(imageSize * 15, imageSize * 15),
-                             Image.FromFile($"..//..//Resourses//spaceShooter_planet_{rnd.Next(1, 19)}.png"));
+                             Image.FromFile($"..//..//Resourses//box_planet_{rnd.Next(1, 14)}.png"));
+                _objs[i + 9] =
+                    new Star(new Point(rnd.Next(Width / 2, Width), rnd.Next(imageSize * 10, Height - imageSize * 10)),
+                             new Point(-1, 0),
+                             new Size(imageSize * 15, imageSize * 10),
+                             Image.FromFile($"..//..//Resourses//rect32_planet_{rnd.Next(1, 8)}.png"));
             }
         }
         public static void Init(Form form)
