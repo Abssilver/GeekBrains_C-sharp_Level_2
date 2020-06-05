@@ -11,10 +11,12 @@ namespace Game_Pavel_Remizov
     static class Game
     {
         private static BufferedGraphicsContext _context;
-
         public static BufferedGraphics Buffer;
 
         private static BaseObject[] _objs;
+        private static Bullet _bullet;
+        private static Asteroid[] _asteroids;
+        private static Random _rnd;
         public static int Width { get; set; }
         public static int Height { get; set; }
 
@@ -23,8 +25,22 @@ namespace Game_Pavel_Remizov
         }
         private static void Load()
         {
-            Random rnd = new Random();
             _objs = new BaseObject[30];
+            _bullet = new Bullet(new Point(0, 200), new Point(5, 0), new Size(4, 1));
+            _asteroids = new Asteroid[3];
+            _rnd = new Random();
+            for (int i = 0; i < _objs.Length; i++)
+            {
+                int r = _rnd.Next(5, 50);
+                _objs[i] = new Star(new Point(1000, _rnd.Next(0, Height)), new Point(-r, r), new Size(3, 3));
+            }
+            for (int i = 0; i < _asteroids.Length; i++)
+            {
+                int r = _rnd.Next(5, 50);
+                _asteroids[i] = 
+                    new Asteroid(new Point(100, _rnd.Next(0, Height)), new Point(-r / 5, r), new Size(r, r));
+            }
+            /*
             for (int i = 0; i < _objs.Length; i+=10)
             {
                 int imageSize = rnd.Next(4, 6);
@@ -79,10 +95,11 @@ namespace Game_Pavel_Remizov
                              new Size(imageSize * 15, imageSize * 10),
                              Image.FromFile($"..//..//Resourses//rect32_planet_{rnd.Next(1, 8)}.png"));
             }
+            */
         }
         public static void Init(Form form)
         {
-            Timer timer = new Timer { Interval = 25 };
+            Timer timer = new Timer { Interval = 50 };
             timer.Start();
             timer.Tick += Timer_Tick;
             Graphics g;
@@ -104,7 +121,7 @@ namespace Game_Pavel_Remizov
             Draw();
             Update();
         }
-        public static void Draw()
+        private static void Draw()
         {
             /*
             Buffer.Graphics.Clear(Color.Black);
@@ -115,15 +132,26 @@ namespace Game_Pavel_Remizov
             Buffer.Graphics.Clear(Color.FromArgb(19, 21, 36));
             foreach (BaseObject obj in _objs)
                 obj.Draw();
+            foreach (Asteroid obj in _asteroids)
+                obj.Draw();
+            _bullet.Draw();
             Buffer.Render();
         }
         public static void Update()
         {
             foreach (BaseObject obj in _objs)
                 obj.Update();
+            foreach (Asteroid asteroid in _asteroids)
             {
-
+                asteroid.Update();
+                if (asteroid.Collision(_bullet))
+                {
+                    System.Media.SystemSounds.Hand.Play();
+                    _bullet.GenerateNewPosition(_rnd);
+                    asteroid.GenerateNewPosition(_rnd);
+                }
             }
+            _bullet.Update();
         }
     }
 }

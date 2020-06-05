@@ -23,7 +23,7 @@ namespace Game_Pavel_Remizov
         public override void Draw()
         {
             if (image is null)
-                base.Draw();
+                Game.Buffer.Graphics.DrawEllipse(Pens.White, Pos.X, Pos.Y, Size.Width, Size.Height);
             else
                 Game.Buffer.Graphics.DrawImage(image, new Rectangle(Pos, base.Size));
         }

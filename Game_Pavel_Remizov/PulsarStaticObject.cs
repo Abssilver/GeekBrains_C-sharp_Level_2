@@ -33,6 +33,7 @@ namespace Game_Pavel_Remizov
                 Dir.X = -Dir.X;
             }
         }
+        public override void Draw() => Game.Buffer.Graphics.DrawEllipse(Pens.White, Pos.X, Pos.Y, Size.Width, Size.Height);
         protected virtual Point GenerateNewPosition(Random rnd) => new Point(rnd.Next(0, Game.Width), rnd.Next(0, Game.Height));
     }
 }
