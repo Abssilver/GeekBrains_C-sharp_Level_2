@@ -8,6 +8,9 @@ using System.Windows.Forms;
 
 namespace Game_Pavel_Remizov
 {
+    //Сделать проверку на задание размера экрана в классе Game.
+    //Если высота или ширина(Width, Height) больше 1000 или принимает отрицательное значение,
+    //выбросить исключение ArgumentOutOfRangeException().
     static class Game
     {
         private static BufferedGraphicsContext _context;
@@ -17,8 +20,28 @@ namespace Game_Pavel_Remizov
         private static Bullet _bullet;
         private static Asteroid[] _asteroids;
         private static Random _rnd;
-        public static int Width { get; set; }
-        public static int Height { get; set; }
+        private static int _width;
+        private static int _height;
+        public static int Width 
+        {
+            get => _width;
+            set
+            {
+                if (value > 1000 || value < 0)
+                    throw new ArgumentOutOfRangeException("Width is invalid value!");
+                else _width = value;
+            }
+        }
+        public static int Height 
+        {
+            get => _height;
+            set
+            {
+                if (value > 1000 || value < 0)
+                    throw new ArgumentOutOfRangeException("Height is invalid value!");
+                else _height = value;
+            }
+        }
 
         static Game()
         { 
@@ -99,17 +122,26 @@ namespace Game_Pavel_Remizov
         }
         public static void Init(Form form)
         {
-            Timer timer = new Timer { Interval = 50 };
-            timer.Start();
-            timer.Tick += Timer_Tick;
-            Graphics g;
-            _context = BufferedGraphicsManager.Current;
-            g = form.CreateGraphics();
-            Width = form.ClientSize.Width;
-            Height = form.ClientSize.Height;
-            Buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
-            Load();
-            FormSetup(form);
+            try
+            {
+                Graphics g;
+                g = form.CreateGraphics();
+                Width = form.ClientSize.Width;
+                Height = form.ClientSize.Height;
+
+                _context = BufferedGraphicsManager.Current;
+                Buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
+                Load();
+                FormSetup(form);
+
+                Timer timer = new Timer { Interval = 50 };
+                timer.Start();
+                timer.Tick += Timer_Tick;
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                MessageBox.Show(ex.Message, "Error!");
+            }
         }
         private static void FormSetup(Form form)
         {

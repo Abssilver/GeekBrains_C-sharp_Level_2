@@ -9,36 +9,36 @@ namespace Game_Pavel_Remizov
 {
     class Star: BaseObject
     {
-        protected Image image;
+        protected Image _image;
         public Star(Point pos, Point dir, Size size) : base (pos, dir, size)
         {
         }
         public Star(Point pos, Point dir, Size aspectRatio, Image image) : base(pos, dir, aspectRatio)
         {
-            this.image = image;
+            _image = image;
         }
         public override void Draw()
         {
-            if (image is null)
+            if (_image is null)
             {
                 Game.Buffer.Graphics.DrawLine
-                    (Pens.White, Pos.X, Pos.Y, Pos.X + Size.Width, Pos.Y + Size.Height);
+                    (Pens.White, base.Pos.X, base.Pos.Y, base.Pos.X + base.Size.Width, base.Pos.Y + base.Size.Height);
                 Game.Buffer.Graphics.DrawLine
-                    (Pens.White, Pos.X + Size.Width, Pos.Y, Pos.X, Pos.Y + Size.Height);
+                    (Pens.White, base.Pos.X + base.Size.Width, base.Pos.Y, base.Pos.X, base.Pos.Y + base.Size.Height);
             }
             else
             {
-                Game.Buffer.Graphics.DrawImage(image, new Rectangle(Pos, base.Size));
+                Game.Buffer.Graphics.DrawImage(_image, new Rectangle(base.Pos, base.Size));
             }
         }
         public override void Update()
         {
-            Pos.X += Dir.X;
-            if (Pos.X + Size.Width < 0)
+            base.Pos.X += base.Dir.X;
+            if (base.Pos.X + base.Size.Width < 0)
             {
                 Random rnd = new Random();
-                Pos.X = Game.Width + Size.Width;
-                Pos.Y = rnd.Next(Size.Height, Game.Height - Size.Height);
+                base.Pos.X = Game.Width + base.Size.Width;
+                base.Pos.Y = rnd.Next(base.Size.Height, Game.Height - base.Size.Height);
             }
         }
     }

@@ -51,6 +51,10 @@
     <Compile Include="Bullet.cs" />
     <Compile Include="CustomPulsarStaticObject.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GameObjectException.cs" />
+    <Compile Include="GameObjectPositionException.cs" />
+    <Compile Include="GameObjectSizeException.cs" />
+    <Compile Include="GameObjectSpeedException.cs" />
     <Compile Include="ICollision.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

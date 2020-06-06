@@ -12,16 +12,18 @@ namespace Game_Pavel_Remizov
     {
         static void Main(string[] args)
         {
+
             Form form = new Form()
             {
-                Width = Screen.PrimaryScreen.Bounds.Width,
+                Width = 1000, //Screen.PrimaryScreen.Bounds.Width,
                 Height = Screen.PrimaryScreen.Bounds.Height
             };
-            //form.Width = 800;
-            //form.Height = 600;
             Game.Init(form);
             form.Show();
             Application.Run(form);
+
+            //form.Width = 800;
+            //form.Height = 600; 
         }
     }
 }

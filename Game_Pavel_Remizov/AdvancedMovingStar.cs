@@ -18,9 +18,9 @@ namespace Game_Pavel_Remizov
         public AdvancedMovingStar(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
         }
-        public AdvancedMovingStar(Point pos, Point dir, Size aspectRatio, Image image) : base(pos, dir, aspectRatio)
+        public AdvancedMovingStar(Point pos, Point dir, Size aspectRatio, Image image) : 
+            base(pos, dir, aspectRatio, image)
         {
-            base.image = image;
             _angle = dir.X == 0 ? dir.Y > 0 ? 90f : 
                                   dir.Y == 0 ? 0f: -90f : 
                      dir.Y == 0 ? dir.X > 0 ? 0f : 180f:
@@ -35,14 +35,14 @@ namespace Game_Pavel_Remizov
         }
         public override void Draw()
         {
-            if (image is null)
+            if (_image is null)
             {
                 base.Draw();
             }
             else
             {
                 Game.Buffer.Graphics.RotateTransform(_angle);
-                Game.Buffer.Graphics.DrawImage(image, new Rectangle(Pos, base.Size));
+                Game.Buffer.Graphics.DrawImage(_image, new Rectangle(Pos, base.Size));
                 Game.Buffer.Graphics.RotateTransform(-_angle);
             }
         }

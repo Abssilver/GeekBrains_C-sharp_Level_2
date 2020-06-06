@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
-using System.Threading.Tasks;
 
 namespace Game_Pavel_Remizov
 {
@@ -16,6 +12,6 @@ namespace Game_Pavel_Remizov
             _brush = brush;
         }
         public override void Draw() =>
-            Game.Buffer.Graphics.FillEllipse(_brush, new Rectangle(base.Pos, Size));
+            Game.Buffer.Graphics.FillEllipse(_brush, new Rectangle(base.Pos, base.Size));
     }
 }

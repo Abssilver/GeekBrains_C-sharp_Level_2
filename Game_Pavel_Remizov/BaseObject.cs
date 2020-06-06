@@ -1,24 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 
 namespace Game_Pavel_Remizov
 {
     //Переделать виртуальный метод Update в BaseObject в абстрактный и реализовать его в наследниках.
-    abstract class BaseObject: ICollision
+    /*
+    *Создать собственное исключение GameObjectException, которое появляется 
+    при попытке создать объект с неправильными характеристиками
+    (например, отрицательные размеры, слишком большая скорость или позиция).
+    */
+    abstract class BaseObject : ICollision
     {
+        //Можно попробовать закинуть проверку в свойства,
+        //но придется поменять структуры на классы, либо менять логику в классах-потомка BaseObject-а
         protected Point Pos;
         protected Point Dir;
         protected Size Size;
+        private double _maxSpeed = 100;
 
         protected BaseObject(Point pos, Point dir, Size size)
         {
-            Pos = pos;
-            Dir = dir;
-            Size = size;
+            if (pos.X > Game.Width + size.Width * 3 || pos.X < -size.Width * 3 ||
+                pos.Y > Game.Height + size.Height * 3 || pos.Y < -size.Height * 3)
+                throw new GameObjectPositionException("Invalid object position!", pos);
+            else Pos = pos;
+
+
+            double speed = Math.Sqrt(Math.Pow(dir.X, 2) + Math.Pow(dir.Y, 2));
+            if (_maxSpeed < speed)
+                throw new GameObjectSpeedException("Invalid object speed!", speed);
+            else Dir = dir;
+
+
+            if (size.Width < 0 || size.Height < 0)
+                throw new GameObjectSizeException("Invalid object size!", size);
+            else Size = size;
         }
         public abstract void Draw();
         //Game.Buffer.Graphics.DrawEllipse(Pens.White, Pos.X, Pos.Y, Size.Width, Size.Height);
