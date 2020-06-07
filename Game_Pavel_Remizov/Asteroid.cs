@@ -6,13 +6,25 @@ namespace Game_Pavel_Remizov
     class Asteroid: BaseObject
     {
         //public int Power { get; set; }
+        private Image _image;
         public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
             //Power = 1;
         }
-        public override void Draw() =>
-            Game.Buffer.Graphics.FillEllipse
-            (Brushes.White, base.Pos.X, base.Pos.Y, base.Size.Width, base.Size.Height);
+        public Asteroid(Point pos, Point dir, Size size, Image image) : base(pos, dir, size)
+        {
+            _image = image;
+        }
+        public override void Draw()
+        {
+            if (_image is null)
+            {
+                Game.Buffer.Graphics.FillEllipse
+                (Brushes.White, base.Pos.X, base.Pos.Y, base.Size.Width, base.Size.Height);
+            }
+            else
+                Game.Buffer.Graphics.DrawImage(_image, new Rectangle(base.Pos, base.Size));
+        }
         public override void Update()
         {
             base.Pos.X += base.Dir.X;

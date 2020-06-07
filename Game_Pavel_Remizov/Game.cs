@@ -48,77 +48,101 @@ namespace Game_Pavel_Remizov
         }
         private static void Load()
         {
-            _objs = new BaseObject[30];
-            _bullet = new Bullet(new Point(0, 200), new Point(5, 0), new Size(4, 1));
-            _asteroids = new Asteroid[3];
-            _rnd = new Random();
-            for (int i = 0; i < _objs.Length; i++)
+            try
             {
-                int r = _rnd.Next(5, 50);
-                _objs[i] = new Star(new Point(1000, _rnd.Next(0, Height)), new Point(-r, r), new Size(3, 3));
+                _objs = new BaseObject[90];
+                _bullet = new Bullet(new Point(0, 200), new Point(5, 0), new Size(4, 1));
+                _asteroids = new Asteroid[3];
+                _rnd = new Random();
+
+                //Звезды - 45шт.
+                for (int i = 0; i < _objs.Length / 2; i++) 
+                {
+                    int r = _rnd.Next(5, 50);
+                    _objs[i] = new Star(new Point(100, _rnd.Next(0, Height)), new Point(-r, r), new Size(3, 3));
+                }
+                //Пульсирующие звезды. Жетлый цвет - 30шт
+                for (int i = _objs.Length / 2; i < 15 * _objs.Length / 18; i++) 
+                {
+                    int pulsarSize = _rnd.Next(2, 5);
+                    _objs[i] = new CustomPulsarStaticObject(new Point(_rnd.Next(0, Width), _rnd.Next(0, Height)),
+                                                            new Point(_rnd.Next(-5, -2), 0),
+                                                            new Size(pulsarSize, pulsarSize), _rnd,
+                                                            Brushes.Yellow);
+                }
+                //НЛО - 3 шт.
+                for (int i = 15 * _objs.Length / 18; i < 13 * _objs.Length / 15; i++)
+                {
+                    int speed = 0;
+                    while (speed.Equals(0))
+                        speed = _rnd.Next(-7, 7);
+                    _objs[i] = new UFO(new Point(_rnd.Next(Width / 5, Width), _rnd.Next(0, Height)),
+                                       new Point(speed, speed),
+                                       new Size(25, 25),
+                                       Image.FromFile($"..//..//Resourses//box_ufo_{_rnd.Next(1, 6)}.png"));
+                }
+                //Объекты - 2шт.
+                for (int i = 13 * _objs.Length / 15; i < 8 * _objs.Length / 9; i++)
+                {
+                    int speed = _rnd.Next(-7, -3);
+                    _objs[i] = new Star(new Point(_rnd.Next(Width / 5, Width), _rnd.Next(0, Height)),
+                             new Point(speed, 0),
+                             new Size(30, 30),
+                             Image.FromFile($"..//..//Resourses//box_object_{_rnd.Next(1, 5)}.png"));
+                }
+                //Планеты - 3шт.
+                for (int i = 8 * _objs.Length / 9; i < 83 * _objs.Length / 90; i++)
+                {
+                    int imageSize = _rnd.Next(35, 50);
+                    _objs[i] = 
+                        new Star(new Point(_rnd.Next(0, Width / 2), _rnd.Next(imageSize, Height - imageSize)),
+                        new Point(-1, 0),
+                        new Size(imageSize, imageSize),
+                        Image.FromFile($"..//..//Resourses//box_planet_{_rnd.Next(1, 14)}.png"));
+                }
+                //Прямоугольные планеты - 2шт.
+                for (int i = 83 * _objs.Length / 90; i < 17 * _objs.Length / 18; i++)
+                {
+                    int imageSize = _rnd.Next(35, 50);
+                    _objs[i] =
+                        new Star(new Point(_rnd.Next(Width / 2, Width), _rnd.Next(imageSize, Height - imageSize)),
+                                 new Point(-1, 0),
+                                 new Size(3 * imageSize, 2 * imageSize),
+                                 Image.FromFile($"..//..//Resourses//rect32_planet_{_rnd.Next(1, 8)}.png"));
+                }
+                //Кометы - 5 шт.
+                for (int i = 17 * _objs.Length / 18; i < _objs.Length; i++)
+                {
+                    int speed = _rnd.Next(2, 9);
+                    _objs[i] =
+                    new AdvancedMovingStar(new Point(_rnd.Next(0, Width), _rnd.Next(0, Height / 3)),//класс сыроват
+                                           new Point(speed, speed),
+                                           new Size(30, 12),
+                                           Image.FromFile($"..//..//Resourses//rect52_comet_{_rnd.Next(1, 6)}.png"));
+                }
+
+
+                for (int i = 0; i < _asteroids.Length; i++)
+                {
+                    int r = _rnd.Next(5, 50);
+                    _asteroids[i] =
+                        new Asteroid(new Point(100, _rnd.Next(0, Height)), new Point(-r / 5, r), new Size(r, r),
+                        Image.FromFile($"..//..//Resourses//box_asteroid_{_rnd.Next(1, 5)}.png"));
+                }
             }
-            for (int i = 0; i < _asteroids.Length; i++)
+            catch (GameObjectPositionException ex)
             {
-                int r = _rnd.Next(5, 50);
-                _asteroids[i] = 
-                    new Asteroid(new Point(100, _rnd.Next(0, Height)), new Point(-r / 5, r), new Size(r, r));
+                MessageBox.Show($"Invalid value: {ex.Position}", $"Error: {ex.Message}");
+                
             }
-            /*
-            for (int i = 0; i < _objs.Length; i+=10)
+            catch (GameObjectSpeedException ex)
             {
-                int imageSize = rnd.Next(4, 6);
-                _objs[i] =
-                    new CustomPulsarStaticObject(new Point(rnd.Next(0, Width), rnd.Next(0, Height)),
-                                                 new Point(-1, 0),
-                                                 new Size(imageSize, imageSize), rnd,
-                                                 Brushes.Yellow);
-                _objs[i + 1] =
-                    new CustomPulsarStaticObject(new Point(rnd.Next(0, Width), rnd.Next(0, Height)),
-                                                 new Point(-1, 0),
-                                                 new Size(imageSize, imageSize), rnd,
-                                                 Brushes.Gray);
-                _objs[i + 2] =
-                    new CustomPulsarStaticObject(new Point(rnd.Next(0, Width), rnd.Next(0, Height)),
-                                                 new Point(-1, 0),
-                                                 new Size(imageSize, imageSize), rnd,
-                                                 Brushes.LightBlue);
-                _objs[i + 3] =
-                    new Star(new Point(rnd.Next(Width / 5, Width), rnd.Next(0, Height)),
-                             new Point(-2, 0),
-                             new Size(imageSize * 2, imageSize * 2),
-                             Image.FromFile($"..//..//Resourses//box_asteroid_{rnd.Next(1, 5)}.png"));
-                _objs[i + 4] =
-                    new Star(new Point(rnd.Next(Width / 5, Width), rnd.Next(0, Height)),
-                             new Point(-3, 0),
-                             new Size(imageSize * 3, imageSize * 3),
-                             Image.FromFile($"..//..//Resourses//box_asteroid_{rnd.Next(1, 5)}.png"));
-                _objs[i + 5] =
-                    new AdvancedMovingStar(new Point(rnd.Next(0, Width), rnd.Next(0, Height / 3)),//класс сыроват
-                                           new Point(1, 1), //работает только с (1,1) и (-1,-1)
-                                           new Size(imageSize * 5, imageSize * 2),
-                                           Image.FromFile($"..//..//Resourses//rect52_comet_{rnd.Next(1, 6)}.png"));
-                _objs[i + 6] =
-                    new UFO(new Point(rnd.Next(Width / 5, Width), rnd.Next(0, Height)),
-                                           new Point(-1, -1),
-                                           new Size(imageSize * 5, imageSize * 5),
-                                           Image.FromFile($"..//..//Resourses//box_ufo_{rnd.Next(1, 6)}.png"));
-                _objs[i + 7] =
-                    new Star(new Point(rnd.Next(Width / 5, Width), rnd.Next(0, Height)),
-                             new Point(-2, 0),
-                             new Size(imageSize * 5, imageSize * 5),
-                             Image.FromFile($"..//..//Resourses//box_object_{rnd.Next(1, 5)}.png"));
-                _objs[i + 8] =
-                    new Star(new Point(rnd.Next(0, Width / 2), rnd.Next(imageSize * 15, Height - imageSize * 15)),
-                             new Point(-1, 0),
-                             new Size(imageSize * 15, imageSize * 15),
-                             Image.FromFile($"..//..//Resourses//box_planet_{rnd.Next(1, 14)}.png"));
-                _objs[i + 9] =
-                    new Star(new Point(rnd.Next(Width / 2, Width), rnd.Next(imageSize * 10, Height - imageSize * 10)),
-                             new Point(-1, 0),
-                             new Size(imageSize * 15, imageSize * 10),
-                             Image.FromFile($"..//..//Resourses//rect32_planet_{rnd.Next(1, 8)}.png"));
+                MessageBox.Show($"Invalid value: {ex.Speed}", $"Error: {ex.Message}");
             }
-            */
+            catch (GameObjectSizeException ex)
+            {
+                MessageBox.Show($"Invalid value: {ex.Size}", $"Error: {ex.Message}");
+            }
         }
         public static void Init(Form form)
         {

@@ -16,7 +16,7 @@ namespace Game_Pavel_Remizov
         }
         public override void Update()
         {
-            _scaler += 0.05f * base.Dir.X;
+            _scaler += 0.02f * base.Dir.X;
             base.Size.Width = Convert.ToInt32(_scaler);
             base.Size.Height = Convert.ToInt32(_scaler);
             if (base.Size.Width <= 0)

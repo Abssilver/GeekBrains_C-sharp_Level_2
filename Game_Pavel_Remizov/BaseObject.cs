@@ -16,6 +16,7 @@ namespace Game_Pavel_Remizov
         protected Point Pos;
         protected Point Dir;
         protected Size Size;
+
         private double _maxSpeed = 100;
 
         protected BaseObject(Point pos, Point dir, Size size)

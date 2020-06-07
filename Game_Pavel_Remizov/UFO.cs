@@ -22,7 +22,7 @@ namespace Game_Pavel_Remizov
                 Game.Buffer.Graphics.DrawEllipse
                     (Pens.White, base.Pos.X, base.Pos.Y, base.Size.Width, base.Size.Height);
             else
-                Game.Buffer.Graphics.DrawImage(_image, new Rectangle(Pos, base.Size));
+                Game.Buffer.Graphics.DrawImage(_image, new Rectangle(base.Pos, base.Size));
         }
         public override void Update()
         {
