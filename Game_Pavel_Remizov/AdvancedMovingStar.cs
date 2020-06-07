@@ -42,12 +42,24 @@ namespace Game_Pavel_Remizov
             else
             {
                 Game.Buffer.Graphics.RotateTransform(_angle);
+                Game.Buffer.Graphics.TranslateTransform(0, -100.0F);
+                /*С матрицей поворота не прокатывает, т.к. изображение рисуется не по точкам, а внутри прямоугольника
+                Point delta = new Point
+                {
+                    X = Convert.ToInt32
+                    (Pos.X * Math.Cos(_angle * Math.PI / 180) - Pos.Y * Math.Sin(_angle * Math.PI / 180)),
+                    Y = Convert.ToInt32
+                    (Pos.X * Math.Sin(_angle * Math.PI / 180) + Pos.Y * Math.Cos(_angle * Math.PI / 180))
+                };
+                */
                 Game.Buffer.Graphics.DrawImage(_image, new Rectangle(Pos, base.Size));
+                Game.Buffer.Graphics.TranslateTransform(0, 100.0F);
                 Game.Buffer.Graphics.RotateTransform(-_angle);
             }
         }
         public override void Update()
         {
+            
             if (!defaultAngles.Contains(_angle))
             {
                 Pos.X += Dir.X;
