@@ -9,32 +9,29 @@ namespace Game_Pavel_Remizov
 {
     class UFO : BaseObject
     {
-        protected Image image;
+        protected Image _image;
         public UFO(Point pos, Point dir, Size size): base (pos, dir, size)
-        {
-            Pos = pos;
-            Dir = dir;
-            Size = size;
-        }
+        { }
         public UFO(Point pos, Point dir, Size aspectRatio, Image image) : base(pos, dir, aspectRatio)
         {
-            this.image = image;
+            _image = image;
         }
         public override void Draw()
         {
-            if (image is null)
-                base.Draw();
+            if (_image is null)
+                Game.Buffer.Graphics.DrawEllipse
+                    (Pens.White, base.Pos.X, base.Pos.Y, base.Size.Width, base.Size.Height);
             else
-                Game.Buffer.Graphics.DrawImage(image, new Rectangle(Pos, base.Size));
+                Game.Buffer.Graphics.DrawImage(_image, new Rectangle(base.Pos, base.Size));
         }
         public override void Update()
         {
-            Pos.X += Dir.X;
-            Pos.Y += Dir.Y;
-            if (Pos.X + Size.Width < 0) Pos.X = Game.Width + Size.Width;
-            else if (Pos.X > Game.Width + Size.Width) Pos.X = -Size.Width;
-            if (Pos.Y + Size.Height < 0) Pos.Y = Game.Height + Size.Height;
-            else if (Pos.Y > Game.Height + Size.Height) Pos.Y = -Size.Height;
+            base.Pos.X += base.Dir.X;
+            base.Pos.Y += base.Dir.Y;
+            if (base.Pos.X + base.Size.Width < 0) base.Pos.X = Game.Width + base.Size.Width;
+            else if (base.Pos.X > Game.Width + base.Size.Width) base.Pos.X = -base.Size.Width;
+            if (base.Pos.Y + base.Size.Height < 0) base.Pos.Y = Game.Height + base.Size.Height;
+            else if (base.Pos.Y > Game.Height + base.Size.Height) base.Pos.Y = -base.Size.Height;
         }
     }
 }

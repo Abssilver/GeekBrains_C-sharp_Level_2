@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{425338CB-D24C-436C-92BB-CD5F1E7300A3}</ProjectGuid>
+    <ProjectGuid>{9C9A720C-067A-4F8B-B809-94A73FD55BFA}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Game_Pavel_Remizov</RootNamespace>
-    <AssemblyName>Game_Pavel_Remizov</AssemblyName>
+    <RootNamespace>Workers_Pavel_Remizov</RootNamespace>
+    <AssemblyName>Workers_Pavel_Remizov</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -35,8 +35,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,22 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdvancedMovingStar.cs" />
-    <Compile Include="Asteroid.cs" />
-    <Compile Include="BaseObject.cs" />
-    <Compile Include="Bullet.cs" />
-    <Compile Include="CustomPulsarStaticObject.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="GameObjectException.cs" />
-    <Compile Include="GameObjectPositionException.cs" />
-    <Compile Include="GameObjectSizeException.cs" />
-    <Compile Include="GameObjectSpeedException.cs" />
-    <Compile Include="ICollision.cs" />
+    <Compile Include="BaseWorkerClass.cs" />
+    <Compile Include="FixedWageWorker.cs" />
+    <Compile Include="HourlyWorker.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Star.cs" />
-    <Compile Include="PulsarStaticObject.cs" />
-    <Compile Include="UFO.cs" />
+    <Compile Include="WorkerEnumerable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

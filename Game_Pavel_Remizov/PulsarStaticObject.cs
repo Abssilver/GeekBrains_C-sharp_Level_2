@@ -1,38 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
-using System.Threading.Tasks;
 
 namespace Game_Pavel_Remizov
 {
     class PulsarStaticObject: BaseObject
     {
-        Random rnd;
+        Random _rnd;
         Size _originalSize;
         float _scaler;
         public PulsarStaticObject(Point pos, Point dir, Size size, Random rnd): base (pos, dir, size)
         {
-            this.rnd = rnd;
+            _rnd = rnd;
             _originalSize = size;
             _scaler = _originalSize.Width;
         }
         public override void Update()
         {
-            _scaler += 0.05f * Dir.X;
-            Size.Width = Convert.ToInt32(_scaler);
-            Size.Height = Convert.ToInt32(_scaler);
-            if (Size.Width <= 0)
+            _scaler += 0.02f * base.Dir.X;
+            base.Size.Width = Convert.ToInt32(_scaler);
+            base.Size.Height = Convert.ToInt32(_scaler);
+            if (base.Size.Width <= 0)
             {
-                Pos = GenerateNewPosition(rnd);
-                Dir.X = -Dir.X;
+                base.GenerateNewPosition(_rnd);
+                base.Dir.X = -base.Dir.X;
             }
-            else if (Size.Width > _originalSize.Width)
-            {
-                Dir.X = -Dir.X;
-            }
+            else if (base.Size.Width > _originalSize.Width)
+                base.Dir.X = -base.Dir.X;
         }
-        protected virtual Point GenerateNewPosition(Random rnd) => new Point(rnd.Next(0, Game.Width), rnd.Next(0, Game.Height));
+        public override void Draw() => 
+            Game.Buffer.Graphics.DrawEllipse(Pens.White, base.Pos.X, base.Pos.Y, base.Size.Width, base.Size.Height);
+        //protected virtual Point GenerateNewPosition(Random rnd) => new Point(rnd.Next(0, Game.Width), rnd.Next(0, Game.Height));
     }
 }
