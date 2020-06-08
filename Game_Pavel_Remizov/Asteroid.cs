@@ -7,6 +7,8 @@ namespace Game_Pavel_Remizov
     {
         //public int Power { get; set; }
         private Image _image;
+
+        public event DisplayMsg DisplayNotification;
         public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
             //Power = 1;
@@ -32,9 +34,15 @@ namespace Game_Pavel_Remizov
             if (base.Pos.X < 0 || base.Pos.X > Game.Width) base.Dir.X = -base.Dir.X;
             if (base.Pos.Y < 0 || base.Pos.Y > Game.Height) base.Dir.Y = -base.Dir.Y;
         }
-        public override void GenerateNewPosition(Random rnd) =>
+        public override void GenerateNewPosition(Random rnd)
+        {
+            DestroyAsteroid();
             base.Pos = new Point
-            (Game.Width - base.Size.Width, 
+            (Game.Width - base.Size.Width,
              rnd.Next(Game.Height / 3 + base.Size.Height, Game.Height * 2 / 3 - base.Size.Height));
+        }
+        private void DestroyAsteroid() => 
+            DisplayNotification?.Invoke($"{DateTime.Now.ToLongTimeString()} - Asteroid has been destroyed!");
+        
     }
 }

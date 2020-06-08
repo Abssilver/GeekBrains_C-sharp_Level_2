@@ -6,7 +6,7 @@ namespace Game_Pavel_Remizov
     class Bullet : BaseObject
     {
         public Bullet(Point pos, Point dir, Size size) : base(pos, dir, size)
-        { 
+        {
         }
         public override void Draw() =>
             Game.Buffer.Graphics.DrawRectangle
