@@ -3,11 +3,11 @@ using System.Drawing;
 
 namespace Game_Pavel_Remizov
 {
-    class Asteroid: BaseObject
+    class Asteroid: BaseObject, ICloneable, IComparable<Asteroid>
     {
-        //public int Power { get; set; }
+        public int Power { get; set; } = 3;
         private Image _image;
-
+        public Point Position => Pos;
         public event DisplayMsg DisplayNotification;
         public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
@@ -16,6 +16,20 @@ namespace Game_Pavel_Remizov
         public Asteroid(Point pos, Point dir, Size size, Image image) : base(pos, dir, size)
         {
             _image = image;
+        }
+        public object Clone()
+        {
+            Asteroid asteroid =
+                new Asteroid(new Point(Pos.X, Pos.Y), new Point(Dir.X, Dir.Y), new Size(Size.Width, Size.Height))
+                { Power = Power };
+            return asteroid;
+        }
+        int IComparable<Asteroid>.CompareTo(Asteroid obj)
+        {
+            //if (obj is Asteroid temp)
+            //    return Power.CompareTo(temp.Power);
+            return Power.CompareTo(obj.Power);
+            //throw new ArgumentException("Parameter is not an Asteroid!");
         }
         public override void Draw()
         {

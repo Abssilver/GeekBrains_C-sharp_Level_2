@@ -9,17 +9,17 @@ namespace Game_Pavel_Remizov
 {
     class Star: BaseObject
     {
-        protected Image _image;
+        protected Image image;
         public Star(Point pos, Point dir, Size size) : base (pos, dir, size)
         {
         }
         public Star(Point pos, Point dir, Size aspectRatio, Image image) : base(pos, dir, aspectRatio)
         {
-            _image = image;
+            this.image = image;
         }
         public override void Draw()
         {
-            if (_image is null)
+            if (image is null)
             {
                 Game.Buffer.Graphics.DrawLine
                     (Pens.White, base.Pos.X, base.Pos.Y, base.Pos.X + base.Size.Width, base.Pos.Y + base.Size.Height);
@@ -28,7 +28,7 @@ namespace Game_Pavel_Remizov
             }
             else
             {
-                Game.Buffer.Graphics.DrawImage(_image, new Rectangle(base.Pos, base.Size));
+                Game.Buffer.Graphics.DrawImage(image, new Rectangle(base.Pos, base.Size));
             }
         }
         public override void Update()

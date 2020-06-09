@@ -10,6 +10,7 @@ namespace Game_Pavel_Remizov
     class Ship : BaseObject
     {
         private int _energy = 100;
+        private int _maxEnergy = 150;
         public int Energy => _energy;
 
         private Image _image;
@@ -44,16 +45,25 @@ namespace Game_Pavel_Remizov
         {
             if (base.Pos.Y < Game.Height) base.Pos.Y += base.Dir.Y;
         }
-        public void EnergyLow(int n)
+        public void EnergyLow(int amount)
         {
-            _energy -= n;
+            _energy -= amount;
             DisplayNotification?.Invoke
-                ($"{DateTime.Now.ToLongTimeString()} - Spaceship got {n} damage! Remaining energy: {Energy}");
+                ($"{DateTime.Now.ToLongTimeString()} - Spaceship got {amount} damage! Remaining energy: {Energy}");
         }
         public void Die()
         {
             DisplayNotification?.Invoke($"{DateTime.Now.ToLongTimeString()} - Spaceship has been destroyed!");
             MessageDie?.Invoke();
+        }
+        public void EnergyUp(int amount)
+        {
+            if (_energy < _maxEnergy)
+            {
+                _energy = _energy + amount > _maxEnergy ? _maxEnergy : _energy + amount;
+                DisplayNotification?.Invoke
+                    ($"{DateTime.Now.ToLongTimeString()} - Spaceship has been repaired for {amount}! Remaining energy: {Energy}");
+            }
         }
     }
 }

@@ -22,9 +22,11 @@ namespace Game_Pavel_Remizov
 
         private static BaseObject[] _objs;
         private static Bullet _bullet;
+        private static FirstAidKit _firstAidKit;
         private static Asteroid[] _asteroids;
         private static int _width;
         private static int _height;
+        private static int _score = 0;
 
         private static Ship _ship;
         public static int Width 
@@ -136,7 +138,8 @@ namespace Game_Pavel_Remizov
                 //Астероиды - 3 шт.
                 for (int i = 0; i < _asteroids.Length; i++)
                 {
-                    int r = _rnd.Next(10, 30);
+                    //int r = _rnd.Next(10, 30);
+                    int r = _rnd.Next(29, 30);
                     _asteroids[i] =
                         new Asteroid(new Point(100, _rnd.Next(0, Height)), new Point(-r / 5, r), new Size(r, r),
                         Image.FromFile($"..//..//Resourses//box_asteroid_{_rnd.Next(1, 5)}.png"));
@@ -202,7 +205,7 @@ namespace Game_Pavel_Remizov
             if (e.KeyCode == Keys.ControlKey)
                 _bullet = new Bullet
                     (new Point(_ship.Rect.X + _ship.shipSizeX / 2, _ship.Rect.Y + _ship.shipSizeY / 2),
-                     new Point(4, 0), new Size(4, 1));
+                     new Point(10, 0), new Size(4, 1));
             if (e.KeyCode == Keys.Up) _ship.Up();
             if (e.KeyCode == Keys.Down) _ship.Down();
         }
@@ -211,8 +214,8 @@ namespace Game_Pavel_Remizov
             form.Icon = new Icon($"..//..//Resourses//gameIcon.ico");
             form.Text = "Spaceship Shooter v0.01";
         }
-        public static void DisplayMessage(string message) => Console.WriteLine(message);
-        public static void SaveLogToFile(string message)
+        private static void DisplayMessage(string message) => Console.WriteLine(message);
+        private static void SaveLogToFile(string message)
         {
             if (File.Exists(filepath))
             {
@@ -233,9 +236,17 @@ namespace Game_Pavel_Remizov
             foreach (Asteroid obj in _asteroids)
                 obj?.Draw();
             _bullet?.Draw();
+            _firstAidKit?.Draw();
             _ship?.Draw();
             if (_ship != null)
-                Buffer.Graphics.DrawString("Energy:" + _ship.Energy, SystemFonts.DefaultFont, Brushes.White, 0, 0);
+            {
+                Buffer.Graphics.DrawString
+                    ("Energy: " + _ship.Energy, 
+                     new Font(FontFamily.GenericMonospace , 15), Brushes.Yellow, Width - 160, 5);
+                Buffer.Graphics.DrawString
+                    ("Score: " + _score, 
+                     new Font(FontFamily.GenericMonospace, 15), Brushes.Yellow, Width - 160, 50);
+            }
             Buffer.Render();
         }
         public static void Update()
@@ -243,6 +254,7 @@ namespace Game_Pavel_Remizov
             foreach (BaseObject obj in _objs)
                 obj.Update();
             _bullet?.Update();
+            _firstAidKit?.Update();
             for (int i = 0; i < _asteroids.Length; i++)
             {
                 if (_asteroids[i] == null) continue;
@@ -250,7 +262,13 @@ namespace Game_Pavel_Remizov
                 if (_bullet != null && _bullet.Collision(_asteroids[i]))
                 {
                     System.Media.SystemSounds.Hand.Play();
+                    _firstAidKit =
+                        new FirstAidKit(new Point(_asteroids[i].Position.X, _asteroids[i].Position.Y),
+                                        new Point(-3, 0),
+                                        new Size(20, 20),
+                                        Image.FromFile($"..//..//Resourses//box_energy_1.png"));
                     //_asteroids[i] = null;
+                    AddScoreForAsteroid();
                     _asteroids[i].GenerateNewPosition(_rnd);
                     _bullet = null;
                     continue;
@@ -261,6 +279,21 @@ namespace Game_Pavel_Remizov
                 _asteroids[i].GenerateNewPosition(_rnd);
                 if (_ship.Energy <= 0) _ship?.Die();
             }
+            if (_firstAidKit != null && _ship.Collision(_firstAidKit))
+            {
+                _firstAidKit = null;
+                _ship?.EnergyUp(_rnd.Next(5, 20));
+            }
+        }
+        private static void AddScoreForAsteroid()
+        {
+            int scoreForAsteroid = _rnd.Next(5, 11);
+            _score += scoreForAsteroid;
+            string msg = string.Format
+                ("{0} - Player received {1} points for the destroyed asteroid! Total score: {2}",
+                 DateTime.Now.ToLongTimeString(), scoreForAsteroid, _score);
+            DisplayMessage(msg);
+            SaveLogToFile(msg);
         }
     }
 }
