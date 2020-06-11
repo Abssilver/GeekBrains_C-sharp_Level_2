@@ -24,9 +24,10 @@ namespace Game_Pavel_Remizov
         //private static Bullet _bullet;
         private static List<Bullet> _bullets = new List<Bullet>();
         private static FirstAidKit _firstAidKit;
-        private static Asteroid[] _asteroids;
+        private static List<Asteroid> _asteroids;
         private static int _width;
         private static int _height;
+        private static int _level = 3;
         private static int _score = 0;
 
         private static Ship _ship;
@@ -68,7 +69,7 @@ namespace Game_Pavel_Remizov
 
                 _objs = new BaseObject[90];
                 //_bullet = new Bullet(new Point(0, 200), new Point(5, 0), new Size(4, 1));
-                _asteroids = new Asteroid[3];
+                //_asteroids = new Asteroid[3];
 
                 //Звезды - 45шт.
                 for (int i = 0; i < _objs.Length / 2; i++) 
@@ -137,18 +138,7 @@ namespace Game_Pavel_Remizov
                 }
 
                 //Астероиды - 3 шт.
-                for (int i = 0; i < _asteroids.Length; i++)
-                {
-                    //int r = _rnd.Next(10, 30);
-                    int r = _rnd.Next(29, 30);
-                    _asteroids[i] =
-                        new Asteroid(new Point(100, _rnd.Next(0, Height)), new Point(-r / 5, r), new Size(r, r),
-                        Image.FromFile($"..//..//Resourses//box_asteroid_{_rnd.Next(1, 5)}.png"));
-
-                    _asteroids[i].DisplayNotification += DisplayMessage;
-                    _asteroids[i].DisplayNotification += SaveLogToFile;
-
-                }
+                GenerateAsteroids(_level++);
             }
             catch (GameObjectPositionException ex)
             {
@@ -161,6 +151,20 @@ namespace Game_Pavel_Remizov
             catch (GameObjectSizeException ex)
             {
                 MessageBox.Show($"Invalid value: {ex.Size}", $"Error: {ex.Message}");
+            }
+        }
+        private static void GenerateAsteroids(int quantity)
+        {
+            _asteroids = new List<Asteroid>(quantity);
+            for (int i = 0; i < quantity; i++)
+            {
+                int r = _rnd.Next(29, 30);
+                _asteroids.Add
+                    (new Asteroid(new Point(100, _rnd.Next(0, Height)), new Point(-r / 5, r), new Size(r, r),
+                     Image.FromFile($"..//..//Resourses//box_asteroid_{_rnd.Next(1, 5)}.png")));
+
+                _asteroids[i].DisplayNotification += DisplayMessage;
+                _asteroids[i].DisplayNotification += SaveLogToFile;
             }
         }
         public static void Init(Form form)
@@ -258,13 +262,19 @@ namespace Game_Pavel_Remizov
             foreach (Bullet bullet in _bullets)
                 bullet?.Update();
             _firstAidKit?.Update();
-            for (int i = 0; i < _asteroids.Length; i++)
+            for (int i = 0; i < _asteroids.Count; i++)
             {
-                if (_asteroids[i] == null) continue;
+                //if (_asteroids[i] == null) continue;
                 _asteroids[i].Update();
                 for (int j = 0; j < _bullets.Count; j++)
                 {
-                    if (_asteroids[i] != null && _bullets[j].Collision(_asteroids[i]))
+                    if (_bullets[j].OutOfBounds)
+                    {
+                        _bullets.RemoveAt(j);
+                        j--;
+                        continue;
+                    }
+                    if (i >= 0 && _bullets[j].Collision(_asteroids[i]))
                     {
                         System.Media.SystemSounds.Hand.Play();
                         _firstAidKit =
@@ -272,14 +282,14 @@ namespace Game_Pavel_Remizov
                                             new Point(-3, 0),
                                             new Size(20, 20),
                                             Image.FromFile($"..//..//Resourses//box_energy_1.png"));
-                        _asteroids[i] = null;
+                        //_asteroids[i] = null;
+                        _asteroids.RemoveAt(i--);
                         AddScoreForAsteroid();
                         //_asteroids[i].GenerateNewPosition(_rnd);
-                        _bullets.RemoveAt(j);
-                        j--;
+                        _bullets.RemoveAt(j--);
                     }
                 }
-                if (_asteroids[i] == null || !_ship.Collision(_asteroids[i])) continue;
+                if (i < 0 || !_ship.Collision(_asteroids[i])) continue;
                 _ship?.EnergyLow(_rnd.Next(5, 20));
                 System.Media.SystemSounds.Asterisk.Play();
                 //_asteroids[i].GenerateNewPosition(_rnd);
@@ -290,6 +300,7 @@ namespace Game_Pavel_Remizov
                 _firstAidKit = null;
                 _ship?.EnergyUp(_rnd.Next(5, 20));
             }
+            if (_asteroids.Count == 0) GenerateAsteroids(_level++);
         }
         private static void AddScoreForAsteroid()
         {
