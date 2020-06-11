@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workers_Pavel_Remizov", "Wo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericDelegate_Pavel_Remizov", "GenericDelegate_Pavel_Remizov\GenericDelegate_Pavel_Remizov.csproj", "{0FBF71EE-130C-41E9-8792-49BB17900F02}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINQ_Basics", "LINQ_Basics\LINQ_Basics.csproj", "{B7EA60F2-DEA2-4FC2-9656-378D18B35F6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{0FBF71EE-130C-41E9-8792-49BB17900F02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FBF71EE-130C-41E9-8792-49BB17900F02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FBF71EE-130C-41E9-8792-49BB17900F02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7EA60F2-DEA2-4FC2-9656-378D18B35F6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7EA60F2-DEA2-4FC2-9656-378D18B35F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7EA60F2-DEA2-4FC2-9656-378D18B35F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7EA60F2-DEA2-4FC2-9656-378D18B35F6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
