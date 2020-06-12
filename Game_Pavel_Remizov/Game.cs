@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,15 +14,21 @@ namespace Game_Pavel_Remizov
     //выбросить исключение ArgumentOutOfRangeException().
     static class Game
     {
+        private static string filepath = "gameLog.txt";
         private static BufferedGraphicsContext _context;
         public static BufferedGraphics Buffer;
+        private static Timer _timer = new Timer { Interval = 25 };
+        private static Random _rnd = new Random();
 
         private static BaseObject[] _objs;
         private static Bullet _bullet;
+        private static FirstAidKit _firstAidKit;
         private static Asteroid[] _asteroids;
-        private static Random _rnd;
         private static int _width;
         private static int _height;
+        private static int _score = 0;
+
+        private static Ship _ship;
         public static int Width 
         {
             get => _width;
@@ -50,10 +57,17 @@ namespace Game_Pavel_Remizov
         {
             try
             {
+                _ship = new Ship(new Point(10, 10), 
+                                 new Point(5, 5), 
+                                 new Size(50, 20), 
+                                 Image.FromFile($"..//..//Resourses//rect52_spaceship_{_rnd.Next(1, 3)}.png"));
+
+                _ship.DisplayNotification += DisplayMessage;
+                _ship.DisplayNotification += SaveLogToFile;
+
                 _objs = new BaseObject[90];
-                _bullet = new Bullet(new Point(0, 200), new Point(5, 0), new Size(4, 1));
+                //_bullet = new Bullet(new Point(0, 200), new Point(5, 0), new Size(4, 1));
                 _asteroids = new Asteroid[3];
-                _rnd = new Random();
 
                 //Звезды - 45шт.
                 for (int i = 0; i < _objs.Length / 2; i++) 
@@ -115,25 +129,29 @@ namespace Game_Pavel_Remizov
                 {
                     int speed = _rnd.Next(2, 9);
                     _objs[i] =
-                    new AdvancedMovingStar(new Point(_rnd.Next(0, Width), _rnd.Next(0, Height / 3)),//класс сыроват
-                                           new Point(speed, speed),
-                                           new Size(30, 12),
-                                           Image.FromFile($"..//..//Resourses//rect52_comet_{_rnd.Next(1, 6)}.png"));
+                    new Star(new Point(_rnd.Next(0, Width), _rnd.Next(Height / 4, 3 * Height / 4)),//класс сыроват
+                             new Point(-speed, 0),
+                             new Size(30, 12),
+                             Image.FromFile($"..//..//Resourses//rect52_comet_{_rnd.Next(1, 6)}.png"));
                 }
 
-
+                //Астероиды - 3 шт.
                 for (int i = 0; i < _asteroids.Length; i++)
                 {
-                    int r = _rnd.Next(5, 50);
+                    //int r = _rnd.Next(10, 30);
+                    int r = _rnd.Next(29, 30);
                     _asteroids[i] =
                         new Asteroid(new Point(100, _rnd.Next(0, Height)), new Point(-r / 5, r), new Size(r, r),
                         Image.FromFile($"..//..//Resourses//box_asteroid_{_rnd.Next(1, 5)}.png"));
+
+                    _asteroids[i].DisplayNotification += DisplayMessage;
+                    _asteroids[i].DisplayNotification += SaveLogToFile;
+
                 }
             }
             catch (GameObjectPositionException ex)
             {
-                MessageBox.Show($"Invalid value: {ex.Position}", $"Error: {ex.Message}");
-                
+                MessageBox.Show($"Invalid value: {ex.Position}", $"Error: {ex.Message}"); 
             }
             catch (GameObjectSpeedException ex)
             {
@@ -158,19 +176,52 @@ namespace Game_Pavel_Remizov
                 Load();
                 FormSetup(form);
 
-                Timer timer = new Timer { Interval = 50 };
-                timer.Start();
-                timer.Tick += Timer_Tick;
+                using (FileStream stream = File.Create(filepath))
+                {
+                    byte[] gameInfo = new UTF8Encoding(true).GetBytes($"This is game log of {DateTime.Now}\n");
+                    stream.Write(gameInfo, 0, gameInfo.Length);
+                }
+
+                _timer.Start();
+                _timer.Tick += Timer_Tick;
+
+                form.KeyDown += Form_KeyDown;
+                Ship.MessageDie += Finish;
             }
             catch (ArgumentOutOfRangeException ex)
             {
                 MessageBox.Show(ex.Message, "Error!");
             }
         }
+        public static void Finish()
+        {
+            _timer.Stop();
+            Buffer.Graphics.DrawString
+                ("The End", new Font(FontFamily.GenericSansSerif, 60, FontStyle.Underline), Brushes.White, 200, 100);
+            Buffer.Render();
+        }
+        private static void Form_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.ControlKey)
+                _bullet = new Bullet
+                    (new Point(_ship.Rect.X + _ship.shipSizeX / 2, _ship.Rect.Y + _ship.shipSizeY / 2),
+                     new Point(10, 0), new Size(4, 1));
+            if (e.KeyCode == Keys.Up) _ship.Up();
+            if (e.KeyCode == Keys.Down) _ship.Down();
+        }
         private static void FormSetup(Form form)
         {
             form.Icon = new Icon($"..//..//Resourses//gameIcon.ico");
             form.Text = "Spaceship Shooter v0.01";
+        }
+        private static void DisplayMessage(string message) => Console.WriteLine(message);
+        private static void SaveLogToFile(string message)
+        {
+            if (File.Exists(filepath))
+            {
+                using (StreamWriter writer = File.AppendText(filepath))
+                    writer.WriteLine(message);
+            }
         }
         private static void Timer_Tick(object sender, EventArgs e)
         {
@@ -179,35 +230,70 @@ namespace Game_Pavel_Remizov
         }
         private static void Draw()
         {
-            /*
-            Buffer.Graphics.Clear(Color.Black);
-            Buffer.Graphics.DrawRectangle(Pens.White, new Rectangle(100, 100, 200, 200));
-            Buffer.Graphics.FillRectangle(Brushes.Wheat, new Rectangle(100, 100, 200, 200));
-            Buffer.Render();
-            */
             Buffer.Graphics.Clear(Color.FromArgb(19, 21, 36));
             foreach (BaseObject obj in _objs)
                 obj.Draw();
             foreach (Asteroid obj in _asteroids)
-                obj.Draw();
-            _bullet.Draw();
+                obj?.Draw();
+            _bullet?.Draw();
+            _firstAidKit?.Draw();
+            _ship?.Draw();
+            if (_ship != null)
+            {
+                Buffer.Graphics.DrawString
+                    ("Energy: " + _ship.Energy, 
+                     new Font(FontFamily.GenericMonospace , 15), Brushes.Yellow, Width - 160, 5);
+                Buffer.Graphics.DrawString
+                    ("Score: " + _score, 
+                     new Font(FontFamily.GenericMonospace, 15), Brushes.Yellow, Width - 160, 50);
+            }
             Buffer.Render();
         }
         public static void Update()
         {
             foreach (BaseObject obj in _objs)
                 obj.Update();
-            foreach (Asteroid asteroid in _asteroids)
+            _bullet?.Update();
+            _firstAidKit?.Update();
+            for (int i = 0; i < _asteroids.Length; i++)
             {
-                asteroid.Update();
-                if (asteroid.Collision(_bullet))
+                if (_asteroids[i] == null) continue;
+                _asteroids[i].Update();
+                if (_bullet != null && _bullet.Collision(_asteroids[i]))
                 {
                     System.Media.SystemSounds.Hand.Play();
-                    _bullet.GenerateNewPosition(_rnd);
-                    asteroid.GenerateNewPosition(_rnd);
+                    _firstAidKit =
+                        new FirstAidKit(new Point(_asteroids[i].Position.X, _asteroids[i].Position.Y),
+                                        new Point(-3, 0),
+                                        new Size(20, 20),
+                                        Image.FromFile($"..//..//Resourses//box_energy_1.png"));
+                    //_asteroids[i] = null;
+                    AddScoreForAsteroid();
+                    _asteroids[i].GenerateNewPosition(_rnd);
+                    _bullet = null;
+                    continue;
                 }
+                if (!_ship.Collision(_asteroids[i])) continue;
+                _ship?.EnergyLow(_rnd.Next(5, 20));
+                System.Media.SystemSounds.Asterisk.Play();
+                _asteroids[i].GenerateNewPosition(_rnd);
+                if (_ship.Energy <= 0) _ship?.Die();
             }
-            _bullet.Update();
+            if (_firstAidKit != null && _ship.Collision(_firstAidKit))
+            {
+                _firstAidKit = null;
+                _ship?.EnergyUp(_rnd.Next(5, 20));
+            }
+        }
+        private static void AddScoreForAsteroid()
+        {
+            int scoreForAsteroid = _rnd.Next(5, 11);
+            _score += scoreForAsteroid;
+            string msg = string.Format
+                ("{0} - Player received {1} points for the destroyed asteroid! Total score: {2}",
+                 DateTime.Now.ToLongTimeString(), scoreForAsteroid, _score);
+            DisplayMessage(msg);
+            SaveLogToFile(msg);
         }
     }
 }

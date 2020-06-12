@@ -16,8 +16,12 @@ namespace Game_Pavel_Remizov
         protected Point Pos;
         protected Point Dir;
         protected Size Size;
+        public Rectangle Rect => new Rectangle(Pos, Size);
 
         private double _maxSpeed = 100;
+
+        public delegate void Message();
+        public delegate void DisplayMsg(string msg);
 
         protected BaseObject(Point pos, Point dir, Size size)
         {
@@ -47,7 +51,6 @@ namespace Game_Pavel_Remizov
             if (Pos.Y < 0 || Pos.Y > Game.Height) Dir.Y = -Dir.Y;
         */
         public bool Collision(ICollision col) => col.Rect.IntersectsWith(this.Rect);
-        public Rectangle Rect => new Rectangle(Pos, Size);
         public virtual void GenerateNewPosition(Random rnd)
         {
             Pos = new Point()
