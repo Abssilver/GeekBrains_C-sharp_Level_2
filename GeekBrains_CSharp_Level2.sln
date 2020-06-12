@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINQ_Basics", "LINQ_Basics\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lesson_4_Task_2_Pavel_Remizov", "Lesson_4_Task_2_Pavel_Remizov\Lesson_4_Task_2_Pavel_Remizov.csproj", "{D6F21396-2154-47BC-B2BD-D51D5A324F97}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lesson_4_Task_3_Pavel_Remizov", "Lesson_4_Task_3_Pavel_Remizov\Lesson_4_Task_3_Pavel_Remizov.csproj", "{610CB737-C92D-4E7D-A6A9-FC6ABD64FFB9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{D6F21396-2154-47BC-B2BD-D51D5A324F97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6F21396-2154-47BC-B2BD-D51D5A324F97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6F21396-2154-47BC-B2BD-D51D5A324F97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{610CB737-C92D-4E7D-A6A9-FC6ABD64FFB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{610CB737-C92D-4E7D-A6A9-FC6ABD64FFB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{610CB737-C92D-4E7D-A6A9-FC6ABD64FFB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{610CB737-C92D-4E7D-A6A9-FC6ABD64FFB9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
