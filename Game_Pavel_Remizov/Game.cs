@@ -160,7 +160,7 @@ namespace Game_Pavel_Remizov
             {
                 int r = _rnd.Next(29, 30);
                 _asteroids.Add
-                    (new Asteroid(new Point(100, _rnd.Next(0, Height)), new Point(-r / 5, r), new Size(r, r),
+                    (new Asteroid(new Point(_rnd.Next(Width / 2, Width), _rnd.Next(0, Height)), new Point(-r / 5, r), new Size(r, r),
                      Image.FromFile($"..//..//Resourses//box_asteroid_{_rnd.Next(1, 5)}.png")));
 
                 _asteroids[i].DisplayNotification += DisplayMessage;
