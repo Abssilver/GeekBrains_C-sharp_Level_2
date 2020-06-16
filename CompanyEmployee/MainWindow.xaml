@@ -16,56 +16,87 @@
         MinWidth="600" 
         MaxHeight="600" 
         MaxWidth="1000">
-    <Grid ShowGridLines="True">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="100"/>
-        </Grid.ColumnDefinitions>
-        <ListView x:Name="lwEmployee" 
-                  Background="BurlyWood"
-                  HorizontalAlignment="Left"
-                  VerticalAlignment="Top"
-                  Margin="10" 
-                  Grid.Row="1"
-                  Grid.Column="1"
-                  Grid.ColumnSpan="3"
-                  ItemsSource="{Binding Path=EmployeeData,
-                  RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="#"  Width="25" DisplayMemberBinding="{Binding Id}"/>
-                    <GridViewColumn Header="Name" Width="100" DisplayMemberBinding="{Binding Name}"/>
-                    <GridViewColumn Header="Surname" Width="100" DisplayMemberBinding="{Binding Surname}"/>
-                    <GridViewColumn Header="Age" Width="50" DisplayMemberBinding="{Binding Age}"/>
-                    <GridViewColumn Header="Salary" Width="100" DisplayMemberBinding="{Binding Salary}"/>
-                    <GridViewColumn Header="Department" Width="200" DisplayMemberBinding="{Binding Dep}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+    
+    <TabControl x:Name="tabControl" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Top">
+        <TabItem Header="Cотрудники">
+            <Grid Background="BurlyWood"
+                  Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="600"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+                <DataGrid x:Name="DataGridEmployee" 
+                          ItemsSource="{Binding Path=EmployeeData, 
+                          RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                          AutoGenerateColumns="False"
+                          Grid.Column="0"
+                          Grid.RowSpan="2"
+                          Margin="10">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn IsReadOnly="True" Width="30" Header="#" Binding="{Binding Path=Id}"/>
+                        <DataGridTextColumn Width="80" Header="Имя" Binding="{Binding Path=Name}"/>
+                        <DataGridTextColumn Width="80" Header="Фамилия" Binding="{Binding Path=Surname}"/>
+                        <DataGridTextColumn Width="80" Header="Возраст" Binding="{Binding Path=Age}"/>
+                        <DataGridTextColumn Width="90" Header="Зарплата" Binding="{Binding Path=Salary}"/>
+                        <DataGridComboBoxColumn 
+                            x:Name="cbDepartments"
+                            Header="Отдел"
+                            Width="210"
+                            SelectedValueBinding="{Binding Path=Department}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Button Grid.Column="1" 
+                        Grid.Row="1"
+                        Margin="10"
+                        VerticalAlignment="Top"
+                        Height="30"
+                        Content="Добавить" Click="AddEmployee"></Button>
+                <Button Grid.Column="1" 
+                        Grid.Row="1"
+                        Margin="10,50"
+                        VerticalAlignment="Top"
+                        Height="30"
+                        Content="Удалить" Click="RemoveEmployee"></Button>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Отделы">
+            <Grid Background="BurlyWood">
+                <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="600"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+                <ListView Margin="10" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding Path=DepartmentData, 
+                          RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Width="570" Header="Отдел"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <TextBox Grid.Column="1"
+                         Grid.Row="0"
+                         Margin="10"
+                         x:Name="TextBoxDepartments"></TextBox>
+                <Button Grid.Column="1" 
+                        Grid.Row="1"
+                        Margin="10"
+                        Height="30"
+                        VerticalAlignment="Top"
+                        Content="Добавить" Click="AddDepartment"></Button>
+            </Grid>
+        </TabItem>
+    </TabControl>
 
-        <StackPanel Grid.Column="4"
-                    Grid.Row="1">
-            <Button 
-                x:Name="btnAdd" 
-                Margin="10" 
-                Content="Добавить"
-                Click="Button_Click"/>
-            <Button 
-                x:Name="btnEdit" 
-                Margin="10" 
-                Content="Редактировать"/>
-        </StackPanel>
-
-
-    </Grid>
 
 </Window>
 

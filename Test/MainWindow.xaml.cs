@@ -10,25 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CompanyEmployee
+namespace Test
 {
     /// <summary>
-    /// Логика взаимодействия для ChildWindow.xaml
+    /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class ChildWindow : Window
+    public partial class MainWindow : Window
     {
-        public ChildWindow()
+        public MainWindow()
         {
             InitializeComponent();
         }
-        public string ViewModel { get; set; }
-        public void ShowViewModel()
-        {
-            this.Owner.Background = new SolidColorBrush(Colors.Crimson);
-            textBlock.Text = ViewModel;
-        }
-
     }
 }

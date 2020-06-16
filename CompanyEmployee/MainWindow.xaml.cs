@@ -23,8 +23,28 @@ namespace CompanyEmployee
     public partial class MainWindow : Window
     {
         ObservableCollection<Employee> _employeeData = new ObservableCollection<Employee>();
+        ObservableCollection<string> _departmentData = new ObservableCollection<string>();
         public ObservableCollection<Employee> EmployeeData => _employeeData;
-    
+        public ObservableCollection<string> DepartmentData => _departmentData;
+        private List<string> _departmentPull = new List<string>
+        {
+            "Маркетинг", "Сбыт", "Инновации",
+            "Закупки", "Финансы", "Связи с общественностью",
+            "Кадры", "Администрация" 
+        };
+        private List<string> _namePull = new List<string>
+        {
+            "Василий Лазарев",
+            "Петр Жуков",
+            "Николай Орехов",
+            "Анастасия Журавлева",
+            "Дмитрий Панов",
+            "Алексей Зуев",
+            "Екатерина Боброва",
+            "Мария Лапина",
+            "Степан Рыбаков"
+        };
+
         public MainWindow()
         {
             InitializeComponent();
@@ -32,61 +52,44 @@ namespace CompanyEmployee
         }
         void FillLists()
         {
-            _employeeData.Add(new Employee("Василий", "Лазарев", 22, 3000, "Маркетинг"));
-            _employeeData.Add(new Employee("Петр", "Жуков", 25, 6000, "Сбыт"));
-            _employeeData.Add(new Employee("Николай", "Орехов", 38, 8000, "Инновации"));
-            _employeeData.Add(new Employee("Анастасия", "Журавлева", 21, 3000, "Производство"));
-            _employeeData.Add(new Employee("Дмитрий", "Панов", 19, 2500, "Закупки"));
-            _employeeData.Add(new Employee("Алексей", "Зуев", 30, 7000, "Финансы"));
-            _employeeData.Add(new Employee("Екатерина","Боброва", 29, 6500, "Связи с общественностью"));
-            _employeeData.Add(new Employee("Мария", "Лапина", 32, 7500, "Кадры"));
-            _employeeData.Add(new Employee("Степан", "Рыбаков", 40, 10000, "Администрация"));
-
-            //lbEmployee.ItemsSource = _employeeData;
-            //listView.ItemsSource = _employeeData;
-        }
-
-        private void lbEmployee_Selected(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show(e.Source.ToString());
-        }
-
-        private void lbEmployee_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            MessageBox.Show(e.AddedItems[0].ToString());
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            _employeeData.Add(new Employee("Сергей", "Кудрявцев", 26, 7000, "Маркетинг"));
-        }
-        private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ComboBox comboBox = (ComboBox)sender;
-            ComboBoxItem selectedItem = (ComboBoxItem)comboBox.SelectedItem;
-            MessageBox.Show(selectedItem.Content?.ToString());
-        }
-        private void Button_Click1(object sender, RoutedEventArgs e)
-        {
-            ChildWindow childWindow = new ChildWindow();
-            // Теперь MainWindow главное окно для childWindow
-            childWindow.Owner = this;
-            childWindow.ViewModel = "ViewModel";
-            childWindow.Show();
-            childWindow.ShowViewModel();
-            foreach (Window window in this.OwnedWindows)
+            Random rnd = new Random();
+            for (int i = 0; i < _namePull.Count; i++)
             {
-                window.Background = new SolidColorBrush(Colors.Aquamarine);
-                if (window is ChildWindow)
-                    window.Title = "Новый заголовок";
-
+                var _nameData = _namePull[i].Split(' ');
+                _employeeData.Add(
+                    new Employee(_nameData[0], _nameData[1], 
+                                 rnd.Next(18, 45), 
+                                 rnd.Next(20, 100) * 100, 
+                                 _departmentPull[rnd.Next(0, _departmentPull.Count)]));
             }
 
+            foreach (var department in _departmentPull)
+            {
+                Department.AddDepartment(department);
+                _departmentData.Add(department);
+            }
+
+            cbDepartments.ItemsSource = Department.DepartmentsName;
+        }
+        private void AddDepartment(object sender, RoutedEventArgs e)
+        {
+            if (!TextBoxDepartments.Text.Equals(string.Empty) &&
+                !Department.DepartmentsName.Exists(x=> TextBoxDepartments.Text.Equals(x)))
+            {
+                Department.AddDepartment(TextBoxDepartments.Text);
+                _departmentData.Add(TextBoxDepartments.Text);
+            }
+            TextBoxDepartments.Clear();
         }
 
-       
+        private void AddEmployee(object sender, RoutedEventArgs e) =>
+            _employeeData.Add(new Employee("Имя", "Фамилия", 00, 0000, Department.DepartmentsName[0]));
 
-
+        private void RemoveEmployee(object sender, RoutedEventArgs e)
+        {
+            if (DataGridEmployee.SelectedIndex>=0)
+                _employeeData.RemoveAt(DataGridEmployee.SelectedIndex);
+        }
     }
 }
 

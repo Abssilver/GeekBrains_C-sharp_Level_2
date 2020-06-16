@@ -14,19 +14,24 @@ namespace CompanyEmployee.Model
         public string Surname { get; set; }
         public int Age { get; set; }
         public double Salary { get; set; }
-        public Department Dep { get; set; } = new Department();
-        public Employee(string name, string surname, int age, int salary, string department)
+        public string Department 
+        { 
+            get => _department.Name; 
+            set => _department.Name = value; 
+        }
+        Department _department;
+    public Employee(string name, string surname, int age, int salary, string department)
         {
             Id = ++_id;
             Name = name;
             Surname = surname;
             Age = age;
             Salary = salary;
-            Dep.Name = department;
+            _department = new Department(department);
         }
         public override string ToString()
         {
-            return $"{Id,3}\t{Name,15}\t{Surname,15}\t{Age,4}\t{Salary,10}\t{Dep}";
+            return $"{Id,3}\t{Name,15}\t{Surname,15}\t{Age,4}\t{Salary,10}\t{_department}";
         }
     }
 }
