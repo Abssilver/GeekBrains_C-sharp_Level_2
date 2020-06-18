@@ -87,7 +87,7 @@ namespace CompanyEmployee
 
         private void RemoveEmployee(object sender, RoutedEventArgs e)
         {
-            if (DataGridEmployee.SelectedIndex>=0)
+            if (DataGridEmployee.SelectedIndex >= 0)
                 _employeeData.RemoveAt(DataGridEmployee.SelectedIndex);
         }
     }
