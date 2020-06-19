@@ -15,7 +15,6 @@ namespace CompanyEmployee.Model
         private string _name;
 
         public event PropertyChangedEventHandler PropertyChanged;
-
         public int Id { get; }
         public string Name 
         { 
@@ -37,7 +36,7 @@ namespace CompanyEmployee.Model
         }
         public static void AddDepartment(string departmentToAdd)
         {
-            if (!_departments.ContainsValue(departmentToAdd))
+            if (!_departments.ContainsValue(departmentToAdd) && !departmentToAdd.Equals(string.Empty))
             {
                 _id++;
                 _departments.Add(_id, departmentToAdd);

@@ -65,7 +65,7 @@ namespace CompanyEmployee.Model
         }
         public string Department 
         { 
-            get => _department.Name; 
+            get => _department?.Name; 
             set => _department.Name = value; 
         }
         Department _department;
