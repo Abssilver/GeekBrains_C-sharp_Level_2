@@ -23,14 +23,20 @@ namespace CompanyEmployee
     public partial class EmployeeEditWindow : Window, INotifyPropertyChanged
     {
         private Employee _editableObject = new Employee();
+        private Employee _originEmployeeLink;
+        private string _department = string.Empty;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public ObservableCollection<string> DepartmentData { get; set; } = new ObservableCollection<string>();
         public string EmployeeDepartment
         { 
-            get => _editableObject.Department;
+            get => _department;
             set
             {
-                if (!this._editableObject.Department.Equals(value))
+                if (!this._department.Equals(value))
                 {
+                    _department = value;
                     _editableObject.Department = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.EmployeeDepartment)));
                 }
@@ -54,12 +60,24 @@ namespace CompanyEmployee
         }
         public EmployeeEditWindow(Employee employeeToEdit) : this()
         {
+            _originEmployeeLink = employeeToEdit;
             Department.DepartmentsName.ForEach(data => DepartmentData.Add(data));
             EmployeeData = employeeToEdit.Clone() as Employee;
+            EmployeeDepartment = EmployeeData.Department;
             //сbDepartment.SelectedValue = EmployeeDepartment;
             //cbDepartment.ItemsSource = DepartmentData;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        private void ApplyChanges(object sender, RoutedEventArgs e)
+        {
+            //this.DialogResult = true;
+            _originEmployeeLink.FullCopy(_editableObject);
+            //string department = _editableObject.Department;
+            this.Close();
+        }
+        private void RejectChanges(object sender, RoutedEventArgs e)
+        {
+            //this.DialogResult = false;
+            this.Close();
+        }
     }
 }

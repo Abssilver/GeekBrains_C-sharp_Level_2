@@ -64,9 +64,16 @@ namespace CompanyEmployee.Model
             }
         }
         public string Department 
-        { 
-            get => _department?.Name; 
-            set => _department.Name = value; 
+        {
+            get => _department?.Name;
+            set
+            {
+                if (this._department.Name != value)
+                {
+                    _department.Name = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.Department)));
+                }
+            }
         }
         Department _department;
 
@@ -83,6 +90,15 @@ namespace CompanyEmployee.Model
             _age = age;
             _salary = salary;
             _department = new Department(department);
+        }
+        public void FullCopy(Employee newData)
+        {
+            this.Id = newData.Id;
+            this.Name = newData.Name;
+            this.Surname = newData.Surname;
+            this.Age = newData.Age;
+            this.Salary = newData.Salary;
+            this.Department = newData.Department;
         }
         public object Clone()
         {

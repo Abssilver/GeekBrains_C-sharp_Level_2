@@ -75,8 +75,7 @@
                     <ColumnDefinition Width="600"/>
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
-                <ListView Margin="10" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding Path=DepartmentData, 
-                          RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
+                <ListView Margin="10" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding Path=DepartmentData}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Width="570" Header="Отдел"/>

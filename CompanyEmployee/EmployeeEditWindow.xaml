@@ -24,9 +24,9 @@
         <ComboBox x:Name="cbDepartment" ItemsSource="{Binding DepartmentData}" Margin="20,210,23,0" 
                   VerticalAlignment="Top" Height="30" SelectedValue="{Binding EmployeeDepartment}"/>
 
-        <Button x:Name="btnOk" Content="Ok" 
-                Margin="160,260,160,0" VerticalAlignment="Top" Width="75" Height="30"/>
-        <Button x:Name="btnCancel" Content="Cancel" 
-                Margin="210,260,0,0" VerticalAlignment="Top" Width="75" Height="30"/>
+        <Button x:Name="btnOk" Content="Ok" Click="ApplyChanges"
+                Margin="110,260,210,0" VerticalAlignment="Top" Height="30"/>
+        <Button x:Name="btnCancel" Content="Cancel" Click="RejectChanges"
+                Margin="217,260,100,0" VerticalAlignment="Top" Height="30"/>
     </Grid>
 </Window>
