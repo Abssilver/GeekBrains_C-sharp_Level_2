@@ -45,10 +45,6 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
-
-
-
-
                 <Button Grid.Column="1" 
                         Grid.Row="0"
                         Margin="10"
@@ -66,7 +62,7 @@
                         Margin="10, 90"
                         VerticalAlignment="Top"
                         Height="30"
-                        Content="Редактировать" Click="AddEmployee"></Button>
+                        Content="Редактировать" Click="Edit"></Button>
             </Grid>
         </TabItem>
         <TabItem Header="Отделы">

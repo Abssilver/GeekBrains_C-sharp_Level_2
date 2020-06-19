@@ -20,20 +20,14 @@ namespace CompanyEmployee
     /// </summary>
     public partial class EmployeeEditWindow : Window
     {
-        public Employee editableObject;
+        public Employee editableObject { get; set; }
         public EmployeeEditWindow()
         {
             InitializeComponent();
         }
-        public EmployeeEditWindow(MainWindow parentWindow): this()
-        {
-            Employee employee = (parentWindow.lvEmployee.SelectedItem as Employee);
-            editableObject = employee.Clone() as Employee;
-        }
         public EmployeeEditWindow(Employee employeeToEdit) : this()
         {
-            Employee employee = (parentWindow.lvEmployee.SelectedItem as Employee);
-            editableObject = employee.Clone() as Employee;
+            editableObject = employeeToEdit.Clone() as Employee;
         }
 
     }

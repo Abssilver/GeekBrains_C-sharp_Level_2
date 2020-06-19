@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CompanyEmployee"
         mc:Ignorable="d"
-        Title="EmployeeEditWindow" Height="350" Width="400">
+        Title="EmployeeEditWindow" Height="350" Width="400"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40*"/>
@@ -13,8 +14,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="60*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Background="BurlyWood" Margin="10">
-            <TextBox x:Name="tbName" Padding="5,5,0,5" Margin="10" TextWrapping="Wrap" Text="Name"/>
+        <StackPanel Background="BurlyWood" Margin="10" DataContext="{Binding editableObject}">
+            <TextBox x:Name="tbName" Padding="5,5,0,5" Margin="10" TextWrapping="Wrap" Text="{Binding Path=Name}"/>
             <TextBox x:Name="tbSurname" Padding="5,5,0,5" Margin="10" TextWrapping="Wrap" Text="Surname"/>
             <TextBox x:Name="tbAge" Padding="5,5,0,5" Margin="10" TextWrapping="Wrap" Text="Age"/>
             <TextBox x:Name="tbSalary" Padding="5,5,0,5" Margin="10" TextWrapping="Wrap" Text="Salary"/>
