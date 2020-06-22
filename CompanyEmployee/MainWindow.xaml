@@ -16,7 +16,7 @@
         MinWidth="600" 
         MaxHeight="600" 
         MaxWidth="1000"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Self}}" Loaded="Window_Loaded">
     
     <TabControl x:Name="tabControl" 
                 HorizontalAlignment="Left" 
@@ -32,19 +32,21 @@
                     <ColumnDefinition Width="600"/>
                     <ColumnDefinition Width="150"/>
                 </Grid.ColumnDefinitions>
-                <ListView Margin="10" Name="lvEmployee" ItemsSource="{Binding Path=EmployeeData}"
-                          Grid.RowSpan="2" ScrollViewer.VerticalScrollBarVisibility="Visible">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="#" Width="40" DisplayMemberBinding="{Binding Id}"/>
-                            <GridViewColumn Header="Имя" Width="100" DisplayMemberBinding="{Binding Path=Name}"/>
-                            <GridViewColumn Header="Фамилия" Width="100" DisplayMemberBinding="{Binding Path=Surname}"/>
-                            <GridViewColumn Header="Возраст" Width="80" DisplayMemberBinding="{Binding Path=Age}"/>
-                            <GridViewColumn Header="Зарплата" Width="70" DisplayMemberBinding="{Binding Path=Salary}"/>
-                            <GridViewColumn Header="Отдел" Width="190" DisplayMemberBinding="{Binding Path=Department}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <DataGrid x:Name="DataGridEmployee" 
+                          AutoGenerateColumns="False"
+                          Grid.Column="0"
+                          Grid.RowSpan="2"
+                          ItemsSource="{Binding}" 
+                          Margin="10">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn IsReadOnly="True" Width="auto" Header="#" Binding="{Binding Path=Id}"/>
+                        <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Имя" Binding="{Binding Path=Name}"/>
+                        <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Фамилия" Binding="{Binding Path=Surname}"/>
+                        <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Возраст" Binding="{Binding Path=Age}"/>
+                        <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Зарплата" Binding="{Binding Path=Salary}"/>
+                        <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Отдел" Binding="{Binding Path=Department}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
                 <Button Grid.Column="1" 
                         Grid.Row="0"
                         Margin="10"
