@@ -44,7 +44,7 @@
                         <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Фамилия" Binding="{Binding Path=Surname}"/>
                         <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Возраст" Binding="{Binding Path=Age}"/>
                         <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Зарплата" Binding="{Binding Path=Salary}"/>
-                        <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Отдел" Binding="{Binding Path=Department}"/>
+                        <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Отдел" Binding="{Binding Path=DepartmentName}"/>
                     </DataGrid.Columns>
                 </DataGrid>
                 <Button Grid.Column="1" 
@@ -52,19 +52,19 @@
                         Margin="10"
                         VerticalAlignment="Top"
                         Height="30"
-                        Content="Добавить" Click="AddEmployee"></Button>
+                        Content="Добавить" Click="AddRecord"></Button>
                 <Button Grid.Column="1" 
                         Grid.Row="0"
                         Margin="10, 50"
                         VerticalAlignment="Top"
                         Height="30"
-                        Content="Удалить" Click="RemoveEmployee"></Button>
+                        Content="Удалить" Click="DeleteRecord"></Button>
                 <Button Grid.Column="1" 
                         Grid.Row="0"
                         Margin="10, 90"
                         VerticalAlignment="Top"
                         Height="30"
-                        Content="Редактировать" Click="Edit"></Button>
+                        Content="Редактировать" Click="UpdateRecord"></Button>
             </Grid>
         </TabItem>
         <TabItem Header="Отделы">

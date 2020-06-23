@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -73,38 +74,37 @@ namespace CompanyEmployee
         }
         private void DeleteRecord(object sender, RoutedEventArgs e)
         {
-            //DataRowView newRow = (DataRowView)peopledatagrid.selecteditem;
-            //newRow.Row.Delete();
+            DataRowView deleteRow = (DataRowView)DataGridEmployee.SelectedItem;
+            deleteRow.Row.Delete();
             adapter.Update(dt);
         }
         private void AddRecord(object sender, RoutedEventArgs e)
         {
             DataRow newRow = dt.NewRow();
-            //editwindow editwindow = new editwindow(newRow);
-            //editwindow.showdialog();
-            //if (editwindow.dialogresult.value)
-            //{
-            //    dt.Rows.Add(editwindow.resultrow);
-            //    adapter.Update(dt);
-            //}
+            EmployeeEditWindow edit = new EmployeeEditWindow(newRow);
+            edit.ShowDialog();
+            if (edit.DialogResult.Value)
+            {
+                dt.Rows.Add(edit.EditableObject);
+                adapter.Update(dt);
+            }
         }
         private void UpdateRecord(object sender, RoutedEventArgs e)
         {
-            //DataRowView newRow = (DataRowView)peopledatagrid.selecteditem;
-           // newRow.BeginEdit();
-
-            //editwindow editWindow = new editwindow(newRow.Row);
-           // editWindow.showDialog();
-
-            //if (editWindow.dialogresult.hasvalue && editWindow.dialogresult.value)
-           // {
-            //    newRow.EndEdit();
-            //    adapter.Update(dt);
-            //}
-           // else
-           // {
-           //     newRow.CancelEdit();
-           // }
+            DataRowView editRow = (DataRowView)DataGridEmployee.SelectedItem;
+            editRow.BeginEdit();
+            EmployeeEditWindow editWindow = new EmployeeEditWindow(editRow.Row);
+            editWindow.ShowDialog();
+            
+            if (editWindow.DialogResult.HasValue && editWindow.DialogResult.Value)
+            {
+                editRow.EndEdit();
+                adapter.Update(dt);
+            }
+            else
+            {
+                editRow.CancelEdit();
+            }
         }
         void FillLists()
         {
@@ -136,28 +136,9 @@ namespace CompanyEmployee
             }
             TextBoxDepartments.Clear();
         }
-
-        private void Edit(object sender, RoutedEventArgs e)
-        {
-            //if (lvEmployee.SelectedIndex >= 0)
-           // {
-           //     EmployeeEditWindow editWindow = new EmployeeEditWindow(lvEmployee.SelectedItem as Employee);
-           //     editWindow.ShowDialog();
-                
-           // }
-        }
-
-        private void AddEmployee(object sender, RoutedEventArgs e) =>
-            _employeeData.Add(new Employee("Имя", "Фамилия", 00, 0000, Department.DepartmentsName[0]));
-
-        private void RemoveEmployee(object sender, RoutedEventArgs e)
-        {
-            //if (lvEmployee.SelectedIndex >= 0)
-            //    _employeeData.RemoveAt(lvEmployee.SelectedIndex);
-        }
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            /*
             SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder
             {
                 DataSource = @"(localdb)\MSSQLLocalDB",
@@ -165,14 +146,29 @@ namespace CompanyEmployee
                 IntegratedSecurity = true,
                 Pooling = true
             };
-
-            connection = new SqlConnection(connectionStringBuilder.ConnectionString);
+            */
+            //connection = new SqlConnection(connectionStringBuilder.ConnectionString);
+            ConnectionStringSettingsCollection settings = ConfigurationManager.ConnectionStrings;
+            string connectionString = settings[0]?.ConnectionString;
+            connection = new SqlConnection(connectionString);
             adapter = new SqlDataAdapter();
 
             #region select
-
+            //"Select EmployeeTable.Id, EmployeeTable.Name, Surname, Age, Salary, DepartmentTable.Name From EmployeeTable"
             SqlCommand command = 
-                new SqlCommand("Select Id, Name, Surname, Age, Salary, Department From EmployeeTable", connection);
+                new SqlCommand(string.Format("Select {0}, {1}, {2}, {3}, {4}, {5} as {6}, {7} from {8} inner join {9} on {10} = {11}",
+                                            "EmployeeTable.Id", 
+                                            "EmployeeTable.Name", 
+                                            "Surname",
+                                            "Age", 
+                                            "Salary",
+                                            "DepartmentTable.Name",
+                                            "DepartmentName",
+                                            "Department",
+                                            "EmployeeTable",
+                                            "DepartmentTable",
+                                            "EmployeeTable.Department",
+                                            "DepartmentTable.Id"), connection);
             adapter.SelectCommand = command;
 
             #endregion
@@ -185,7 +181,7 @@ namespace CompanyEmployee
             command.Parameters.Add("@Surname", SqlDbType.NVarChar, -1, "Surname");
             command.Parameters.Add("@Age", SqlDbType.TinyInt, 1, "Age");
             command.Parameters.Add("@Salary", SqlDbType.Decimal, 5, "Salary");
-            command.Parameters.Add("@Department", SqlDbType.NVarChar, -1, "Department");
+            command.Parameters.Add("@Department", SqlDbType.Int, -1, "Department");
             SqlParameter param = command.Parameters.Add("@Id", SqlDbType.Int, 0, "Id");
             param.Direction = ParameterDirection.Output;
             adapter.InsertCommand = command;
@@ -195,13 +191,13 @@ namespace CompanyEmployee
             #region update
 
             command = new SqlCommand(@"Update EmployeeTable Set Name = @Name, Surname = @Surname,
-                                     Age = @Age, Salary = @Salary, Department = @Department,
+                                     Age = @Age, Salary = @Salary, Department = @Department
                                      Where Id = @Id", connection);
             command.Parameters.Add("@Name", SqlDbType.NVarChar, -1, "Name");
             command.Parameters.Add("@Surname", SqlDbType.NVarChar, -1, "Surname");
             command.Parameters.Add("@Age", SqlDbType.TinyInt, 1, "Age");
             command.Parameters.Add("@Salary", SqlDbType.Decimal, 5, "Salary");
-            command.Parameters.Add("@Department", SqlDbType.NVarChar, -1, "Department");
+            command.Parameters.Add("@Department", SqlDbType.Int, -1, "Department");
             param = command.Parameters.Add("@Id", SqlDbType.Int, 0, "Id");
             //param.SourceVersion = DataRowVersion.Original;
             adapter.UpdateCommand = command;

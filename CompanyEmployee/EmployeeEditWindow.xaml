@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CompanyEmployee"
         mc:Ignorable="d"
         Title="EmployeeEditWindow" Height="350" Width="400"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="CenterScreen" Loaded="Window_Loaded"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Grid.RowDefinitions>
@@ -15,14 +15,14 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="60*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel x:Name="spEmployee" Background="BurlyWood" Margin="10" DataContext="{Binding EmployeeData}">
-            <TextBox x:Name="tbName" Padding="5,5,0,5" Margin="10" TextWrapping="Wrap" Text="{Binding Path=Name}"/>
-            <TextBox x:Name="tbSurname" Padding="5,5,0,5" Margin="10" TextWrapping="Wrap" Text="{Binding Path=Surname}"/>
-            <TextBox x:Name="tbAge" Padding="5,5,0,5" Margin="10" TextWrapping="Wrap" Text="{Binding Path=Age}"/>
-            <TextBox x:Name="tbSalary" Padding="5,5,0,5" Margin="10" TextWrapping="Wrap" Text="{Binding Path=Salary}"/>
+        <StackPanel x:Name="spEmployee" Background="BurlyWood" Margin="10">
+            <TextBox x:Name="tbName" Padding="5,5,0,5" Margin="10" TextWrapping="Wrap"/>
+            <TextBox x:Name="tbSurname" Padding="5,5,0,5" Margin="10" TextWrapping="Wrap"/>
+            <TextBox x:Name="tbAge" Padding="5,5,0,5" Margin="10" TextWrapping="Wrap"/>
+            <TextBox x:Name="tbSalary" Padding="5,5,0,5" Margin="10" TextWrapping="Wrap"/>
         </StackPanel>
-        <ComboBox x:Name="cbDepartment" ItemsSource="{Binding DepartmentData}" Margin="20,210,23,0" 
-                  VerticalAlignment="Top" Height="30" SelectedValue="{Binding EmployeeDepartment}"/>
+        <ComboBox x:Name="cbDepartment" Margin="20,210,23,0" 
+                  VerticalAlignment="Top" Height="30"/>
 
         <Button x:Name="btnOk" Content="Ok" Click="ApplyChanges"
                 Margin="110,260,210,0" VerticalAlignment="Top" Height="30"/>

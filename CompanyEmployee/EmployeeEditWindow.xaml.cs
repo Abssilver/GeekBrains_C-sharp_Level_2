@@ -1,6 +1,7 @@
 ﻿using CompanyEmployee.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -14,6 +15,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Data.SqlClient;
+using System.Configuration;
 
 namespace CompanyEmployee
 {
@@ -23,10 +26,17 @@ namespace CompanyEmployee
     public partial class EmployeeEditWindow : Window, INotifyPropertyChanged
     {
         private Employee _editableObject = new Employee();
-        private Employee _originEmployeeLink;
+        private DataRow _originEmployeeLink;
         private string _department = string.Empty;
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private Dictionary<string, int> departmentsDictionary = new Dictionary<string, int>();
+
+        SqlConnection connection;
+        SqlDataAdapter adapter;
+        DataTable dt;
+        public DataRow EditableObject { get; set; }
 
         public ObservableCollection<string> DepartmentData { get; set; } = new ObservableCollection<string>();
         public string EmployeeDepartment
@@ -58,25 +68,57 @@ namespace CompanyEmployee
         {
             InitializeComponent();
         }
-        public EmployeeEditWindow(Employee employeeToEdit) : this()
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            _originEmployeeLink = employeeToEdit;
-            Department.DepartmentsName.ForEach(data => DepartmentData.Add(data));
-            EmployeeData = employeeToEdit.Clone() as Employee;
-            EmployeeDepartment = EmployeeData.Department;
+            tbName.Text = EditableObject["Name"].ToString();
+            tbSurname.Text = EditableObject["Surname"].ToString();
+            tbAge.Text = EditableObject["Age"].ToString();
+            tbSalary.Text = EditableObject["Salary"].ToString();
+            //cbDepartment.SelectedItem = EditableObject["Department"].ToString();
+
+            ConnectionStringSettingsCollection settings = ConfigurationManager.ConnectionStrings;
+            string connectionString = settings[0]?.ConnectionString;
+            connection = new SqlConnection(connectionString);
+            adapter = new SqlDataAdapter();
+            SqlCommand command =
+                new SqlCommand("Select Id, Name from DepartmentTable", connection);
+            adapter.SelectCommand = command;
+            dt = new DataTable();
+            adapter.Fill(dt);
+            //SqlCommandBuilder commandBuilder = new SqlCommandBuilder(adapter);
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+                departmentsDictionary.Add(Convert.ToString(dt.Rows[i]["Name"]), Convert.ToInt32(dt.Rows[i]["Id"]));
+
+            cbDepartment.ItemsSource = departmentsDictionary.Keys;
+            //cbDepartment.DisplayMemberPath = "Name";
+            cbDepartment.SelectedValue = EditableObject["DepartmentName"].ToString();
+        }
+        public EmployeeEditWindow(DataRow employeeToEdit) : this()
+        {
+            EditableObject = employeeToEdit;
+            //Department.DepartmentsName.ForEach(data => DepartmentData.Add(data));
+            //EmployeeData = employeeToEdit.Clone() as Employee;
+            //EmployeeDepartment = EmployeeData.Department;
             //сbDepartment.SelectedValue = EmployeeDepartment;
             //cbDepartment.ItemsSource = DepartmentData;
         }
         private void ApplyChanges(object sender, RoutedEventArgs e)
         {
-            //this.DialogResult = true;
-            _originEmployeeLink.FullCopy(_editableObject);
+            EditableObject["Name"] = tbName.Text;
+            EditableObject["Surname"] = tbSurname.Text;
+            EditableObject["Age"] = Convert.ToByte(tbAge.Text);
+            EditableObject["Salary"] = Convert.ToDecimal(tbSalary.Text);
+            EditableObject["DepartmentName"] = cbDepartment.SelectedValue.ToString();
+            EditableObject["Department"] = departmentsDictionary[cbDepartment.SelectedValue.ToString()];
+            this.DialogResult = true;
+            //_originEmployeeLink.FullCopy(_editableObject);
             //string department = _editableObject.Department;
             this.Close();
         }
         private void RejectChanges(object sender, RoutedEventArgs e)
         {
-            //this.DialogResult = false;
+            this.DialogResult = false;
             this.Close();
         }
     }
