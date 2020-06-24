@@ -25,29 +25,6 @@ namespace CompanyEmployee
     /// </summary>
     public partial class MainWindow : Window
     {
-        ObservableCollection<Employee> _employeeData = new ObservableCollection<Employee>();
-        ObservableCollection<string> _departmentData = new ObservableCollection<string>();
-        public ObservableCollection<Employee> EmployeeData => _employeeData;
-        public ObservableCollection<string> DepartmentData => _departmentData;
-        private List<string> _departmentPull = new List<string>
-        {
-            "Маркетинг", "Сбыт", "Инновации",
-            "Закупки", "Финансы", "Связи с общественностью",
-            "Кадры", "Администрация" 
-        };
-        private List<string> _namePull = new List<string>
-        {
-            "Василий Лазарев",
-            "Петр Жуков",
-            "Николай Орехов",
-            "Анастасия Журавлева",
-            "Дмитрий Панов",
-            "Алексей Зуев",
-            "Екатерина Боброва",
-            "Мария Лапина",
-            "Степан Рыбаков"
-        };
-
         SqlConnection connection;
         SqlDataAdapter adapter;
         DataTable dt;
@@ -55,22 +32,6 @@ namespace CompanyEmployee
         public MainWindow()
         {
             InitializeComponent();
-            //FillLists();
-            
-
-            
-            /*
-            command = new SqlCommand(@"Insert Into People (FIO, Birthday, Email, Phone)
-                                    Values (@FIO, @Birthday, @Email, @Phone); Set @ID = @@Identity;", connection);
-            command.Parameters.Add("@FIO", SqlDbType.NVarChar, -1, "FIO");
-            command.Parameters.Add("@Birthday", SqlDbType.NVarChar, -1, "Birthday");
-            command.Parameters.Add("@Email", SqlDbType.NVarChar, 50, "Email");
-            command.Parameters.Add("@Phone", SqlDbType.NVarChar, -1, "Phone");
-            SqlParameter param = command.Parameters.Add("@ID", SqlDbType.Int, 0, "ID");
-            */
-            
-            //peopleDatagrid.datacontext = dt.DefaultView;
-            //CBox.ItemsSurce = dt.DefaultView;
         }
         private void DeleteRecord(object sender, RoutedEventArgs e)
         {
@@ -109,30 +70,12 @@ namespace CompanyEmployee
                 editRow.CancelEdit();
             }
         }
-        void FillLists()
-        {
-            Random rnd = new Random();
-            for (int i = 0; i < _namePull.Count; i++)
-            {
-                var _nameData = _namePull[i].Split(' ');
-                _employeeData.Add(
-                    new Employee(_nameData[0], _nameData[1], 
-                                 rnd.Next(18, 45), 
-                                 rnd.Next(20, 100) * 100, 
-                                 _departmentPull[rnd.Next(0, _departmentPull.Count)]));
-            }
 
-            foreach (var department in _departmentPull)
-            {
-                Department.AddDepartment(department);
-                _departmentData.Add(department);
-            }
-            //lvEmployee.ItemsSource = _employeeData;
-        }
         private void EditDepartments(object sender, RoutedEventArgs e)
         {
             DepartmentEditWindow editWindow = new DepartmentEditWindow();
             editWindow.ShowDialog();
+            adapter.Update(dt);
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {

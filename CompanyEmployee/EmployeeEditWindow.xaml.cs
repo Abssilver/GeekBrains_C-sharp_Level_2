@@ -23,47 +23,14 @@ namespace CompanyEmployee
     /// <summary>
     /// Логика взаимодействия для EmployeeEditWindow.xaml
     /// </summary>
-    public partial class EmployeeEditWindow : Window, INotifyPropertyChanged
+    public partial class EmployeeEditWindow : Window
     {
-        private Employee _editableObject = new Employee();
-        private DataRow _originEmployeeLink;
-        private string _department = string.Empty;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private Dictionary<string, int> departmentsDictionary = new Dictionary<string, int>();
 
         SqlConnection connection;
         SqlDataAdapter adapter;
         DataTable dt;
         public DataRow EditableObject { get; set; }
-
-        public ObservableCollection<string> DepartmentData { get; set; } = new ObservableCollection<string>();
-        public string EmployeeDepartment
-        { 
-            get => _department;
-            set
-            {
-                if (!this._department.Equals(value))
-                {
-                    _department = value;
-                    _editableObject.Department = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.EmployeeDepartment)));
-                }
-            }
-        }
-        public Employee EmployeeData
-        { 
-            get => _editableObject;
-            set
-            {
-                if (!this._editableObject.Equals(value))
-                {
-                    _editableObject = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.EmployeeData)));
-                }
-            }
-        }
         public EmployeeEditWindow()
         {
             InitializeComponent();
@@ -97,11 +64,6 @@ namespace CompanyEmployee
         public EmployeeEditWindow(DataRow employeeToEdit) : this()
         {
             EditableObject = employeeToEdit;
-            //Department.DepartmentsName.ForEach(data => DepartmentData.Add(data));
-            //EmployeeData = employeeToEdit.Clone() as Employee;
-            //EmployeeDepartment = EmployeeData.Department;
-            //сbDepartment.SelectedValue = EmployeeDepartment;
-            //cbDepartment.ItemsSource = DepartmentData;
         }
         private void ApplyChanges(object sender, RoutedEventArgs e)
         {
@@ -112,8 +74,6 @@ namespace CompanyEmployee
             EditableObject["DepartmentName"] = cbDepartment.SelectedValue.ToString();
             EditableObject["Department"] = departmentsDictionary[cbDepartment.SelectedValue.ToString()];
             this.DialogResult = true;
-            //_originEmployeeLink.FullCopy(_editableObject);
-            //string department = _editableObject.Department;
             this.Close();
         }
         private void RejectChanges(object sender, RoutedEventArgs e)
