@@ -75,7 +75,8 @@ namespace CompanyEmployee
         {
             DepartmentEditWindow editWindow = new DepartmentEditWindow();
             editWindow.ShowDialog();
-            adapter.Update(dt);
+            dt.Clear();
+            adapter.Fill(dt);
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
