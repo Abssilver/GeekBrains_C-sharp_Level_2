@@ -74,9 +74,12 @@ namespace CompanyEmployee
         }
         private void DeleteRecord(object sender, RoutedEventArgs e)
         {
-            DataRowView deleteRow = (DataRowView)DataGridEmployee.SelectedItem;
-            deleteRow.Row.Delete();
-            adapter.Update(dt);
+            if (DataGridEmployee.SelectedIndex > -1)
+            {
+                DataRowView deleteRow = (DataRowView)DataGridEmployee.SelectedItem;
+                deleteRow.Row.Delete();
+                adapter.Update(dt);
+            }
         }
         private void AddRecord(object sender, RoutedEventArgs e)
         {
@@ -126,15 +129,10 @@ namespace CompanyEmployee
             }
             //lvEmployee.ItemsSource = _employeeData;
         }
-        private void AddDepartment(object sender, RoutedEventArgs e)
+        private void EditDepartments(object sender, RoutedEventArgs e)
         {
-            if (!TextBoxDepartments.Text.Equals(string.Empty) &&
-                !Department.DepartmentsName.Exists(x=> TextBoxDepartments.Text.Equals(x)))
-            {
-                Department.AddDepartment(TextBoxDepartments.Text);
-                _departmentData.Add(TextBoxDepartments.Text);
-            }
-            TextBoxDepartments.Clear();
+            DepartmentEditWindow editWindow = new DepartmentEditWindow();
+            editWindow.ShowDialog();
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {

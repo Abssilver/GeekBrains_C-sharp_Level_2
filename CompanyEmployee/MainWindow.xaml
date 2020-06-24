@@ -17,87 +17,53 @@
         MaxHeight="600" 
         MaxWidth="1000"
         DataContext="{Binding RelativeSource={RelativeSource Self}}" Loaded="Window_Loaded">
-    
-    <TabControl x:Name="tabControl" 
-                HorizontalAlignment="Left" 
-                VerticalAlignment="Top">
-        <TabItem Header="Cотрудники">
-            <Grid Background="BurlyWood"
-                  Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="8*"/>
-                    <RowDefinition Height="2*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="600"/>
-                    <ColumnDefinition Width="150"/>
-                </Grid.ColumnDefinitions>
-                <DataGrid x:Name="DataGridEmployee" 
+    <Grid Background="BurlyWood" Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="600"/>
+            <ColumnDefinition Width="150"/>
+        </Grid.ColumnDefinitions>
+        <DataGrid x:Name="DataGridEmployee" 
                           AutoGenerateColumns="False"
                           Grid.Column="0"
                           Grid.RowSpan="2"
                           ItemsSource="{Binding}" 
                           Margin="10">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn IsReadOnly="True" Width="auto" Header="#" Binding="{Binding Path=Id}"/>
-                        <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Имя" Binding="{Binding Path=Name}"/>
-                        <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Фамилия" Binding="{Binding Path=Surname}"/>
-                        <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Возраст" Binding="{Binding Path=Age}"/>
-                        <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Зарплата" Binding="{Binding Path=Salary}"/>
-                        <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Отдел" Binding="{Binding Path=DepartmentName}"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <Button Grid.Column="1" 
+            <DataGrid.Columns>
+                <DataGridTextColumn IsReadOnly="True" Width="auto" Header="#" Binding="{Binding Path=Id}"/>
+                <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Имя" Binding="{Binding Path=Name}"/>
+                <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Фамилия" Binding="{Binding Path=Surname}"/>
+                <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Возраст" Binding="{Binding Path=Age}"/>
+                <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Зарплата" Binding="{Binding Path=Salary}"/>
+                <DataGridTextColumn IsReadOnly="True" Width="auto" Header="Отдел" Binding="{Binding Path=DepartmentName}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Grid.Column="1" 
                         Grid.Row="0"
                         Margin="10"
                         VerticalAlignment="Top"
                         Height="30"
                         Content="Добавить" Click="AddRecord"></Button>
-                <Button Grid.Column="1" 
+        <Button Grid.Column="1" 
                         Grid.Row="0"
                         Margin="10, 50"
                         VerticalAlignment="Top"
                         Height="30"
                         Content="Удалить" Click="DeleteRecord"></Button>
-                <Button Grid.Column="1" 
+        <Button Grid.Column="1" 
                         Grid.Row="0"
                         Margin="10, 90"
                         VerticalAlignment="Top"
                         Height="30"
                         Content="Редактировать" Click="UpdateRecord"></Button>
-            </Grid>
-        </TabItem>
-        <TabItem Header="Отделы">
-            <Grid Background="BurlyWood">
-                <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="50"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="600"/>
-                    <ColumnDefinition Width="100"/>
-                </Grid.ColumnDefinitions>
-                <ListView Margin="10" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding Path=DepartmentData}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Width="570" Header="Отдел"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-                <TextBox Grid.Column="1"
-                         Grid.Row="0"
-                         Margin="10"
-                         x:Name="TextBoxDepartments"></TextBox>
-                <Button Grid.Column="1" 
-                        Grid.Row="1"
-                        Margin="10"
-                        Height="30"
+        <Button Grid.Column="1" 
+                        Grid.Row="0"
+                        Margin="10, 130"
                         VerticalAlignment="Top"
-                        Content="Добавить" Click="AddDepartment"></Button>
-            </Grid>
-        </TabItem>
-    </TabControl>
-
-
+                        Height="30"
+                        Content="Отделы" Click="EditDepartments"></Button>
+    </Grid>
 </Window>
-
