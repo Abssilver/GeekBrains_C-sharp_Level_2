@@ -52,12 +52,6 @@
                         Content="Выбрать сотрудника" Click="GetEmployeeById"></Button>
         <Button Grid.Column="1" 
                         Grid.Row="0"
-                        Margin="10, 90"
-                        VerticalAlignment="Top"
-                        Height="30"
-                        Content="Редактировать"></Button>
-        <Button Grid.Column="1" 
-                        Grid.Row="0"
                         Margin="10, 130"
                         VerticalAlignment="Top"
                         Height="30"
