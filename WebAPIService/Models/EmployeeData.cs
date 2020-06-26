@@ -57,7 +57,7 @@ namespace WebAPIService.Models
                                 Surname = reader["Surname"].ToString(),
                                 Age = Convert.ToByte(reader["Age"]),
                                 Salary = Convert.ToDouble(reader["Salary"]),
-                                Department = reader["Department"].ToString()
+                                Department = reader["DepartmentName"].ToString()
                             });
                     }
                 }
@@ -66,7 +66,6 @@ namespace WebAPIService.Models
             sqlConnection.Close();
             return employees;
         }
-
         public Employee GetEmployeeById(int Id)
         {
             sqlConnection.Open();
@@ -83,6 +82,7 @@ namespace WebAPIService.Models
                     {
                         employeeToReturn = new Employee()
                         {
+                            Id = Convert.ToInt32(reader["Id"]),
                             Name = reader["Name"].ToString(),
                             Surname = reader["Surname"].ToString(),
                             Age = Convert.ToByte(reader["Age"]),
@@ -112,7 +112,6 @@ namespace WebAPIService.Models
                 }
                 catch
                 {
-
                     return false;
                 }
                 return true;

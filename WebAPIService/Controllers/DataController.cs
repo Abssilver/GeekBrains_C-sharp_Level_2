@@ -8,16 +8,20 @@ using WebAPIService.Models;
 
 namespace WebAPIService.Controllers
 {
-    public class EmployeeController : ApiController
+    public class DataController : ApiController
     {
-        private EmployeeData data = new EmployeeData();
+        private EmployeeData _employeeData = new EmployeeData();
+        private DepartmentData _departmentData = new DepartmentData();
         
         [HttpGet]
-        [Route("getData")]
-        public List<Employee> GetData() => data.GetEmployeeData();
+        [Route("get_employee")]
+        public List<Employee> GetEmployeeData() => _employeeData.GetEmployeeData();
 
-        [Route("getData/{id}")]
-        public Employee GetEmployee(int id) => data.GetEmployeeById(id);
+        [Route("get_employee/{id}")]
+        public Employee GetEmployee(int id) => _employeeData.GetEmployeeById(id);
+
+        [Route("get_departments")]
+        public List<Department> GetDepartmentData() => _departmentData.GetDepartmentData();
 
         #region TestRoute
         /*
@@ -30,10 +34,10 @@ namespace WebAPIService.Controllers
         */
         #endregion
 
-        [Route("addEmployee")]
+        [Route("add_employee")]
         public HttpResponseMessage Post([FromBody] Employee value)
         {
-            if (data.AddEmployee(value))
+            if (_employeeData.AddEmployee(value))    
                 return Request.CreateResponse(HttpStatusCode.Created);
             else return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
