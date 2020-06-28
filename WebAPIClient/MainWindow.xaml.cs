@@ -98,6 +98,21 @@ namespace WebAPIClient
             return employees;
         }
         */
+        /*
+        private void Post(object sender, RoutedEventArgs e)
+        {
+            var obj = @"{
+                      'Name': 'Дмитрий',
+                      'Surname': 'Грязев',
+                      'Age': 25,
+                      'Salary': 50000,
+                      'Department': 2
+                       }";
+            var content = new StringContent(obj, Encoding.UTF8, "application/json");
+            var r = client.PostAsync(client.BaseAddress + "add_employee", content).Result;
+            textBox.Text = r.ToString();
+        }
+        */
         static async Task<Employee> GetEmployeeAsync(string path)
         {
             Employee employee = null;

@@ -80,6 +80,7 @@ namespace WebAPIService.Models
                 {
                     while (reader.Read())
                     {
+                        //возвращает индекс, надо продумать о возвращении названия департамента
                         employeeToReturn = new Employee()
                         {
                             Id = Convert.ToInt32(reader["Id"]),
@@ -106,7 +107,7 @@ namespace WebAPIService.Models
                                                  N'{toAdd.Surname}', 
                                                   '{toAdd.Age}', 
                                                   '{toAdd.Salary}', 
-                                                 N'{toAdd.Department}')";
+                                                  '{toAdd.Department}')";
                     using (SqlCommand command = new SqlCommand(sqlQuery, sqlConnection))
                         command.ExecuteNonQuery();
                 }

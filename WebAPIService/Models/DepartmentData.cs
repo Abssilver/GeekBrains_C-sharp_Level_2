@@ -45,7 +45,6 @@ namespace WebAPIService.Models
                             });
                     }
                 }
-
             }
             sqlConnection.Close();
             return departments;
