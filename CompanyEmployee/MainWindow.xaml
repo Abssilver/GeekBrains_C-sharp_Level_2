@@ -15,7 +15,8 @@
         MinHeight="400" 
         MinWidth="600" 
         MaxHeight="600" 
-        MaxWidth="1000">
+        MaxWidth="1000"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
     
     <TabControl x:Name="tabControl" 
                 HorizontalAlignment="Left" 
@@ -24,45 +25,44 @@
             <Grid Background="BurlyWood"
                   Margin="10">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="8*"/>
+                    <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="600"/>
-                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="150"/>
                 </Grid.ColumnDefinitions>
-                <DataGrid x:Name="DataGridEmployee" 
-                          ItemsSource="{Binding Path=EmployeeData, 
-                          RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
-                          AutoGenerateColumns="False"
-                          Grid.Column="0"
-                          Grid.RowSpan="2"
-                          Margin="10">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn IsReadOnly="True" Width="30" Header="#" Binding="{Binding Path=Id}"/>
-                        <DataGridTextColumn Width="80" Header="Имя" Binding="{Binding Path=Name}"/>
-                        <DataGridTextColumn Width="80" Header="Фамилия" Binding="{Binding Path=Surname}"/>
-                        <DataGridTextColumn Width="80" Header="Возраст" Binding="{Binding Path=Age}"/>
-                        <DataGridTextColumn Width="90" Header="Зарплата" Binding="{Binding Path=Salary}"/>
-                        <DataGridComboBoxColumn 
-                            x:Name="cbDepartments"
-                            Header="Отдел"
-                            Width="210"
-                            SelectedValueBinding="{Binding Path=Department}"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                <ListView Margin="10" Name="lvEmployee" ItemsSource="{Binding Path=EmployeeData}"
+                          Grid.RowSpan="2" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="#" Width="40" DisplayMemberBinding="{Binding Id}"/>
+                            <GridViewColumn Header="Имя" Width="100" DisplayMemberBinding="{Binding Path=Name}"/>
+                            <GridViewColumn Header="Фамилия" Width="100" DisplayMemberBinding="{Binding Path=Surname}"/>
+                            <GridViewColumn Header="Возраст" Width="80" DisplayMemberBinding="{Binding Path=Age}"/>
+                            <GridViewColumn Header="Зарплата" Width="70" DisplayMemberBinding="{Binding Path=Salary}"/>
+                            <GridViewColumn Header="Отдел" Width="190" DisplayMemberBinding="{Binding Path=Department}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
                 <Button Grid.Column="1" 
-                        Grid.Row="1"
+                        Grid.Row="0"
                         Margin="10"
                         VerticalAlignment="Top"
                         Height="30"
                         Content="Добавить" Click="AddEmployee"></Button>
                 <Button Grid.Column="1" 
-                        Grid.Row="1"
-                        Margin="10,50"
+                        Grid.Row="0"
+                        Margin="10, 50"
                         VerticalAlignment="Top"
                         Height="30"
                         Content="Удалить" Click="RemoveEmployee"></Button>
+                <Button Grid.Column="1" 
+                        Grid.Row="0"
+                        Margin="10, 90"
+                        VerticalAlignment="Top"
+                        Height="30"
+                        Content="Редактировать" Click="Edit"></Button>
             </Grid>
         </TabItem>
         <TabItem Header="Отделы">
@@ -75,8 +75,7 @@
                     <ColumnDefinition Width="600"/>
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
-                <ListView Margin="10" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding Path=DepartmentData, 
-                          RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
+                <ListView Margin="10" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding Path=DepartmentData}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Width="570" Header="Отдел"/>

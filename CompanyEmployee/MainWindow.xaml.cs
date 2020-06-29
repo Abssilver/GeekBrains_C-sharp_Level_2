@@ -68,8 +68,7 @@ namespace CompanyEmployee
                 Department.AddDepartment(department);
                 _departmentData.Add(department);
             }
-
-            cbDepartments.ItemsSource = Department.DepartmentsName;
+            //lvEmployee.ItemsSource = _employeeData;
         }
         private void AddDepartment(object sender, RoutedEventArgs e)
         {
@@ -82,13 +81,23 @@ namespace CompanyEmployee
             TextBoxDepartments.Clear();
         }
 
+        private void Edit(object sender, RoutedEventArgs e)
+        {
+            if (lvEmployee.SelectedIndex >= 0)
+            {
+                EmployeeEditWindow editWindow = new EmployeeEditWindow(lvEmployee.SelectedItem as Employee);
+                editWindow.ShowDialog();
+                //_employeeData.RemoveAt(lvEmployee.SelectedIndex);
+            }
+        }
+
         private void AddEmployee(object sender, RoutedEventArgs e) =>
             _employeeData.Add(new Employee("Имя", "Фамилия", 00, 0000, Department.DepartmentsName[0]));
 
         private void RemoveEmployee(object sender, RoutedEventArgs e)
         {
-            if (DataGridEmployee.SelectedIndex>=0)
-                _employeeData.RemoveAt(DataGridEmployee.SelectedIndex);
+            if (lvEmployee.SelectedIndex >= 0)
+                _employeeData.RemoveAt(lvEmployee.SelectedIndex);
         }
     }
 }
